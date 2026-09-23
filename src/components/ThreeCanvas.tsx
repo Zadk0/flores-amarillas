@@ -397,38 +397,50 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     // 8. TEXTOS 3D FLOTANTES (Cartelas Románticas)
     function createTextSprite(text: string) {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 160;
+      canvas.width = 720;
+      canvas.height = 190;
       const ctx = canvas.getContext('2d')!;
 
       // Fondo oscuro elegante con halo ámbar
-      const bgGrad = ctx.createLinearGradient(0, 0, 512, 160);
-      bgGrad.addColorStop(0, 'rgba(25, 18, 5, 0.72)');
-      bgGrad.addColorStop(0.5, 'rgba(48, 28, 6, 0.88)');
-      bgGrad.addColorStop(1, 'rgba(25, 18, 5, 0.72)');
+      const bgGrad = ctx.createLinearGradient(0, 0, 720, 190);
+      bgGrad.addColorStop(0, 'rgba(25, 18, 5, 0.82)');
+      bgGrad.addColorStop(0.5, 'rgba(48, 28, 6, 0.94)');
+      bgGrad.addColorStop(1, 'rgba(25, 18, 5, 0.82)');
       ctx.fillStyle = bgGrad;
-      ctx.roundRect(16, 20, 480, 120, 32);
+      ctx.roundRect(16, 16, 688, 158, 36);
       ctx.fill();
 
       // Borde dorado suave
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.7)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
+      ctx.lineWidth = 3.5;
       ctx.stroke();
 
       // Destellos discretos
       ctx.fillStyle = '#FDE68A';
-      ctx.font = '22px serif';
-      ctx.fillText('✦', 36, 88);
-      ctx.fillText('✦', 458, 88);
+      ctx.font = '24px serif';
+      ctx.fillText('✦', 36, 96);
+      ctx.fillText('✦', 684, 96);
 
-      // Texto
-      ctx.font = 'italic 50px "Playfair Display", Georgia, serif';
+      // Texto dinámico con ajuste inteligente si es largo
       ctx.fillStyle = '#FEF08A';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'rgba(245, 158, 11, 0.6)';
-      ctx.shadowBlur = 12;
-      ctx.fillText(text, 256, 80);
+      ctx.shadowColor = 'rgba(245, 158, 11, 0.7)';
+      ctx.shadowBlur = 14;
+
+      if (text.length > 28) {
+        ctx.font = 'italic 34px "Playfair Display", Georgia, serif';
+        // Dividir en 2 líneas si es necesario
+        const words = text.split(' ');
+        const mid = Math.ceil(words.length / 2);
+        const line1 = words.slice(0, mid).join(' ');
+        const line2 = words.slice(mid).join(' ');
+        ctx.fillText(line1, 360, 68);
+        ctx.fillText(line2, 360, 118);
+      } else {
+        ctx.font = 'italic 44px "Playfair Display", Georgia, serif';
+        ctx.fillText(text, 360, 95);
+      }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.minFilter = THREE.LinearFilter;
@@ -438,7 +450,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         depthWrite: false
       });
       const sprite = new THREE.Sprite(mat);
-      sprite.scale.set(6.8, 2.1, 1);
+      sprite.scale.set(8.5, 2.3, 1);
       return sprite;
     }
 
@@ -447,87 +459,87 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const orbitingGroup = new THREE.Group();
     const celestialPairs = [
       {
-        text: "Mi amor",
-        r: 10.5,
+        text: "Eres la mujer de mis sueños, siempre quiero estar a tu lado",
+        r: 11.0,
         a: 0.4,
         y: 1.5,
         s: 0.88,
         letter: {
-          title: "Mi gran amor",
-          tagline: "Constelación de Ternura",
-          textParagraph1: "Amarte es la aventura más dulce y hermosa que el destino pudo regalarme.",
-          textParagraph2: "Cada latido de mi corazón lleva tu nombre, y hoy celebro tu existencia con estas rosas doradas.",
-          signature: "Con todo mi amor infinito."
+          title: "Mi Amor Eterno",
+          tagline: "El Sueño Más Hermoso",
+          textParagraph1: "Eres la mujer de mis sueños, siempre quiero estar a tu lado.",
+          textParagraph2: "Desde que llegaste a mi vida no hay un solo instante en que no agradezca tenerte; eres mi felicidad entera.",
+          signature: "Siempre a tu lado, por y para siempre."
         }
       },
       {
-        text: "Eres mi sol",
-        r: 14.0,
-        a: 1.5,
+        text: "Me encantas de pies a cabeza amor de mi vida",
+        r: 14.5,
+        a: 1.45,
         y: -1.2,
-        s: 0.78,
+        s: 0.82,
         letter: {
-          title: "Eres mi sol",
-          tagline: "Luz Cálida y Radiante",
-          textParagraph1: "Como el sol de primavera que despierta las flores amarillas, tú iluminas hasta mis días más grises.",
-          textParagraph2: "Tu calidez me abriga el alma y tu sonrisa me devuelve la fe en todo lo bueno.",
-          signature: "Brillas en mi vida para siempre."
+          title: "Amor de mi Vida",
+          tagline: "Fascinación Total",
+          textParagraph1: "Me encantas de pies a cabeza amor de mi vida.",
+          textParagraph2: "Tu mirada, tu sonrisa, tu manera de ser y cada detalle tuyo me enamoran cada día más y más.",
+          signature: "Completamente loco por ti."
         }
       },
       {
-        text: "Te amo",
-        r: 11.8,
-        a: 2.7,
+        text: "Me haces tan feliz corazon de melon",
+        r: 12.2,
+        a: 2.5,
         y: 2.2,
-        s: 0.92,
+        s: 0.90,
         letter: {
-          title: "Te amo con el alma",
-          tagline: "Promesa en Amarillo",
-          textParagraph1: "Decir 'te amo' se queda pequeño ante la inmensidad de lo que despiertas en mí.",
-          textParagraph2: "Te amo en cada silencio, en cada carcajada y en cada sueño que construimos juntos.",
-          signature: "Te amo hoy más que ayer y menos que mañana."
+          title: "Corazón de Melón",
+          tagline: "Mi Alegría Inmensa",
+          textParagraph1: "Me haces tan feliz corazón de melón.",
+          textParagraph2: "A tu lado cada día se llena de risas, ternura y un color amarillo brillante lleno de amor.",
+          signature: "Tu felicidad es la mía."
         }
       },
       {
-        text: "Eres preciosa",
-        r: 15.2,
-        a: 3.8,
+        text: "Eres la mejor novia del mundo mundial",
+        r: 15.6,
+        a: 3.6,
         y: 0.5,
-        s: 0.84,
-        letter: {
-          title: "Eres preciosa",
-          tagline: "Belleza Pura y Singular",
-          textParagraph1: "No solo cautivas mis ojos con tu belleza única; cautivas mi espíritu con tu bondad y dulzura.",
-          textParagraph2: "Eres el poema más lindo que la vida jamás escribió, perfecta en cada detalle.",
-          signature: "Cautivado por tu encanto."
-        }
-      },
-      {
-        text: "Mi rosa favorita",
-        r: 12.5,
-        a: 4.8,
-        y: -2.0,
-        s: 0.78,
-        letter: {
-          title: "Mi flor favorita",
-          tagline: "Flor de Oro y Amor",
-          textParagraph1: "Entre millones de flores en este infinito jardín, mis ojos y mi corazón siempre te eligen a ti.",
-          textParagraph2: "Tu delicadeza, tu aroma y tu esencia hacen que el mundo entero florezca a tu alrededor.",
-          signature: "Para la rosa más bella de mi jardín."
-        }
-      },
-      {
-        text: "Luz de mis días",
-        r: 16.0,
-        a: 5.7,
-        y: 1.8,
         s: 0.86,
         letter: {
-          title: "Luz de mis días",
-          tagline: "Guía y Destello Dorado",
-          textParagraph1: "Gracias por ser ese faro de esperanza, ternura y alegría incondicional en mi camino.",
-          textParagraph2: "Tenerte a mi lado convierte lo cotidiano en un milagro dorado lleno de felicidad.",
-          signature: "Gracias por existir e iluminarme."
+          title: "Mi Princesa Hermosa",
+          tagline: "La Mejor de Todas",
+          textParagraph1: "Eres la mejor novia del mundo mundial.",
+          textParagraph2: "No existe en ningún rincón del planeta alguien tan tierna, linda, comprensiva y perfecta como tú.",
+          signature: "El novio más afortunado del universo."
+        }
+      },
+      {
+        text: "Estas muy chula amorcito chula",
+        r: 13.0,
+        a: 4.65,
+        y: -2.0,
+        s: 0.80,
+        letter: {
+          title: "Amorcito Chula",
+          tagline: "Belleza Pura",
+          textParagraph1: "Estás muy chula amorcito chula.",
+          textParagraph2: "Eres la más preciosa de todas, una florecita resplandeciente que ilumina todo a su alrededor.",
+          signature: "Para la más chula de mi corazón."
+        }
+      },
+      {
+        text: "Gracias por siempre estar conmigo siempre, TE AMOOOOO",
+        r: 16.5,
+        a: 5.6,
+        y: 1.8,
+        s: 0.88,
+        letter: {
+          title: "Mi Amor Incondicional",
+          tagline: "Gratitud y Pasión",
+          textParagraph1: "Gracias por siempre estar conmigo siempre, ¡TE AMOOOOO!",
+          textParagraph2: "Gracias por tu apoyo, por tus abrazos cálidos y por hacerme sentir tan amado en cada segundo de la vida.",
+          signature: "¡Te amooooo con todas mis fuerzas!"
         }
       }
     ];

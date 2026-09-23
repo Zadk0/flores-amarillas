@@ -97,39 +97,26 @@ ${currentSignature}`;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300 no-raycast"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm transition-opacity duration-300 no-raycast"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg parchment-paper rounded-2xl p-8 sm:p-10 text-stone-900 border-2 border-[#D4AF37] shadow-2xl transition-all duration-400 transform scale-100"
+        className="relative w-full max-w-lg bg-[#FAF8F5] rounded-3xl p-8 sm:p-10 text-stone-900 border border-amber-300/40 shadow-2xl transition-all duration-400 transform scale-100"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Esquinas ornamentales estilo filigrana */}
-        <span className="absolute top-3 left-4 text-[#B45309] text-xl select-none opacity-80">❦</span>
-        <span className="absolute top-3 right-4 text-[#B45309] text-xl select-none opacity-80 scale-x-[-1]">❦</span>
-        <span className="absolute bottom-3 left-4 text-[#B45309] text-xl select-none opacity-80 scale-y-[-1]">❦</span>
-        <span className="absolute bottom-3 right-4 text-[#B45309] text-xl select-none opacity-80 scale-[-1]">❦</span>
-
-        {/* Sello de cera dorado */}
-        <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 via-amber-600 to-amber-800 border-2 border-amber-200 flex items-center justify-center shadow-lg shadow-amber-900/40 cursor-pointer hover:scale-105 transition-transform"
-             onClick={handleTriggerSparkles}
-             title="Toca para destellos de amor">
-          <span className="text-amber-100 text-2xl font-serif">❦</span>
-        </div>
-
         {/* Botón de cerrar superior */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-stone-400 hover:text-amber-800 transition-colors p-1 rounded-full"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 transition-colors p-1.5 rounded-full hover:bg-stone-200/50 cursor-pointer"
           title="Cerrar"
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
         {/* Encabezado de la carta */}
-        <div className="text-center mt-3 mb-6">
-          <div className="flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-amber-800 font-semibold mb-2">
-            <span>{currentTagline}</span>
+        <div className="text-center mt-1 mb-5">
+          <div className="text-[11px] tracking-widest text-amber-700/80 uppercase font-medium mb-1.5">
+            {currentTagline}
           </div>
 
           {isEditingName ? (
@@ -145,55 +132,51 @@ ${currentSignature}`;
               />
               <button
                 type="submit"
-                className="px-2.5 py-1 text-xs bg-amber-700 text-amber-50 rounded hover:bg-amber-800 font-sans-ui"
+                className="px-2.5 py-1 text-xs bg-amber-700 text-amber-50 rounded hover:bg-amber-800 font-sans-ui cursor-pointer"
               >
                 Listo
               </button>
             </form>
           ) : (
             <div className="flex items-center justify-center gap-2 group">
-              <h2 className="font-serif-display text-3xl sm:text-4xl font-bold text-amber-950 tracking-tight">
+              <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
                 {currentGreeting}{customName ? `, ${customName}` : ""}
               </h2>
               <button
                 onClick={() => setIsEditingName(true)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-amber-700 hover:text-amber-900"
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-stone-400 hover:text-amber-800 cursor-pointer"
                 title="Personalizar nombre"
               >
-                <Edit3 size={16} />
+                <Edit3 size={15} />
               </button>
             </div>
           )}
 
-          {/* Divisor dorado */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <span className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#D4AF37]"></span>
-            <span className="text-[#D4AF37] text-xs tracking-widest">✦ ❀ ✦</span>
-            <span className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#D4AF37]"></span>
-          </div>
+          {/* Divisor sutil y simple */}
+          <div className="w-12 h-0.5 bg-amber-400/50 mx-auto mt-4 rounded-full"></div>
         </div>
 
         {/* Mensaje de la carta requerido */}
-        <div className="text-center font-garamond text-xl sm:text-2xl text-amber-950 leading-relaxed space-y-4 my-6 px-2 sm:px-4">
-          <p className="font-medium text-amber-950">
+        <div className="text-center font-garamond text-lg sm:text-xl text-stone-800 leading-relaxed space-y-3.5 my-6 px-2 sm:px-4">
+          <p className="font-medium text-stone-900">
             {currentParagraph1}
           </p>
-          <p className="text-amber-900/90 font-normal">
+          <p className="text-stone-700 font-normal">
             {currentParagraph2}
           </p>
           <div className="pt-2">
-            <span className="font-script text-3xl sm:text-4xl font-bold text-amber-800 block text-shadow-sm">
+            <span className="font-script text-2xl sm:text-3xl font-semibold text-amber-800 block">
               {currentSignature}
             </span>
           </div>
         </div>
 
         {/* Pie de carta con acciones */}
-        <div className="mt-8 pt-4 border-t border-amber-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mt-8 pt-4 border-t border-stone-200/80 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-amber-900 hover:bg-amber-100/70 border border-amber-300 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-stone-700 hover:bg-stone-100 border border-stone-300 transition-colors cursor-pointer"
               title="Copiar texto de la carta"
             >
               {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
@@ -201,7 +184,7 @@ ${currentSignature}`;
             </button>
             <button
               onClick={handleTriggerSparkles}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-amber-900 hover:bg-amber-100/70 border border-amber-300 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-stone-700 hover:bg-stone-100 border border-stone-300 transition-colors cursor-pointer"
               title="Lanzar flores y destellos"
             >
               <Sparkles size={14} className="text-amber-600" />
@@ -212,7 +195,7 @@ ${currentSignature}`;
           {/* Botón principal de Cerrar */}
           <button
             onClick={onClose}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-700 hover:to-amber-800 text-amber-100 font-sans-ui text-sm font-semibold tracking-wide shadow-md transition-all hover:shadow-lg active:scale-95"
+            className="w-full sm:w-auto px-5 py-2 rounded-full bg-stone-900 hover:bg-stone-800 text-stone-50 font-sans-ui text-xs font-medium tracking-wide shadow-sm transition-all active:scale-95 cursor-pointer"
           >
             Cerrar
           </button>

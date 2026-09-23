@@ -21,79 +21,61 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenDownload
 }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 border-b border-amber-500/15 bg-neutral-950/40 backdrop-blur-md">
-      {/* Zone 1: Brand title wordmark */}
-      <div className="flex items-center gap-2.5">
-        <span className="text-amber-400 text-sm animate-pulse">✦</span>
+    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-5 sm:px-8 py-3.5 bg-neutral-950/20 backdrop-blur-sm transition-all">
+      {/* Título minimalista */}
+      <div className="flex items-center gap-2">
         <button
           onClick={() => onSelectCameraPreset('center')}
-          className="text-lg sm:text-xl font-serif-display font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-500 hover:opacity-90 transition-opacity"
+          className="text-base sm:text-lg font-serif-display tracking-wider text-amber-200/90 hover:text-amber-100 transition-colors cursor-pointer"
         >
           Flores Amarillas
         </button>
       </div>
 
-      {/* Zone 2: Navigation Links / View controls */}
-      <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-amber-200/80">
-        <button
-          onClick={() => onSelectCameraPreset('center')}
-          className="hover:text-amber-300 transition-colors flex items-center gap-1.5"
-        >
-          <Eye size={13} />
-          <span>Enfocar Flor</span>
-        </button>
-        <button
-          onClick={() => onSelectCameraPreset('overview')}
-          className="hover:text-amber-300 transition-colors"
-        >
-          Vista Cósmica
-        </button>
+      {/* Controles simples y elegantes */}
+      <div className="flex items-center gap-2 sm:gap-3 text-xs">
+        {/* Giro automático */}
         <button
           onClick={onToggleAutoRotate}
-          className={`flex items-center gap-1.5 transition-colors ${
-            autoRotate ? 'text-amber-400 font-semibold' : 'text-amber-200/70 hover:text-amber-300'
+          className={`px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 cursor-pointer ${
+            autoRotate
+              ? 'border-amber-400/40 text-amber-300 bg-amber-950/20'
+              : 'border-white/10 text-neutral-400 hover:text-neutral-200 hover:border-white/20'
           }`}
+          title="Pausar o reanudar giro"
         >
-          <RotateCw size={13} className={autoRotate ? 'animate-spin' : ''} style={{ animationDuration: '6s' }} />
-          <span>Giro {autoRotate ? 'Activado' : 'Pausado'}</span>
-        </button>
-        <button
-          onClick={onToggleAudio}
-          className={`flex items-center gap-1.5 transition-colors ${
-            isAudioPlaying ? 'text-amber-400 font-semibold' : 'text-amber-200/70 hover:text-amber-300'
-          }`}
-        >
-          {isAudioPlaying ? <Volume2 size={14} className="text-amber-400 animate-pulse" /> : <VolumeX size={14} />}
-          <span>{isAudioPlaying ? 'Música ON' : 'Música'}</span>
-        </button>
-      </nav>
-
-      {/* Zone 3: Primary Actions */}
-      <div className="flex items-center gap-2.5">
-        {/* En móvil: botón rápido de audio */}
-        <button
-          onClick={onToggleAudio}
-          className="md:hidden p-2 rounded-full bg-neutral-900/60 border border-amber-500/20 text-amber-300"
-          title="Música romántica"
-        >
-          {isAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          <RotateCw size={13} className={autoRotate ? 'animate-spin' : ''} style={{ animationDuration: '8s' }} />
+          <span className="hidden sm:inline">{autoRotate ? 'Giro' : 'Pausado'}</span>
         </button>
 
-        {/* Botón para descargar el código en 3 archivos (Requisito 5) */}
+        {/* Música */}
+        <button
+          onClick={onToggleAudio}
+          className={`px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 cursor-pointer ${
+            isAudioPlaying
+              ? 'border-amber-400/40 text-amber-300 bg-amber-950/20'
+              : 'border-white/10 text-neutral-400 hover:text-neutral-200 hover:border-white/20'
+          }`}
+          title="Música de fondo"
+        >
+          {isAudioPlaying ? <Volume2 size={13} className="text-amber-300 animate-pulse" /> : <VolumeX size={13} />}
+          <span className="hidden sm:inline">Música</span>
+        </button>
+
+        {/* Descargar Código */}
         <button
           onClick={onOpenDownload}
-          className="px-3.5 py-1.5 text-xs font-medium text-amber-300/90 hover:text-amber-200 bg-amber-950/40 hover:bg-amber-900/40 border border-amber-500/25 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap"
-          title="Descargar index.html, style.css y script.js"
+          className="px-3 py-1.5 rounded-full border border-white/10 text-neutral-400 hover:text-neutral-200 hover:border-white/20 transition-all flex items-center gap-1.5 cursor-pointer"
+          title="Descargar archivos"
         >
           <Download size={13} />
-          <span className="hidden sm:inline">Descargar Código</span>
-          <span className="sm:hidden">Código</span>
+          <span className="hidden md:inline">Descargar</span>
         </button>
 
-        {/* Botón "Para Ti" en el header para acceso rápido */}
+        {/* Abrir carta */}
         <button
           onClick={onOpenLetter}
-          className="px-4 py-1.5 text-xs font-semibold text-neutral-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 rounded-lg shadow-sm shadow-amber-500/30 transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-1.5 whitespace-nowrap"
+          className="px-4 py-1.5 rounded-full font-medium text-amber-950 bg-amber-400 hover:bg-amber-300 transition-all flex items-center gap-1.5 shadow-sm shadow-amber-500/20 cursor-pointer"
         >
           <Sparkles size={13} />
           <span>Para Ti</span>
