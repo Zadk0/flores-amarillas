@@ -2,7 +2,7 @@ export const STANDALONE_INDEX_HTML = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Flores Amarillas - Para Mi Amor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,11 +145,11 @@ body {
 /* Recuadro morado claro de bienvenida sobrepuesto */
 .welcome-note {
   position: absolute;
-  top: 24px;
+  top: max(16px, env(safe-area-inset-top, 16px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
-  width: 90%;
+  width: calc(100% - 32px);
   max-width: 440px;
   pointer-events: auto;
   animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -354,7 +354,7 @@ body {
   justify-content: center;
   align-items: center;
   pointer-events: auto;
-  padding-bottom: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
 }
 
 .btn-para-ti {
@@ -375,6 +375,7 @@ body {
   gap: 12px;
   box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), 0 10px 30px rgba(0, 0, 0, 0.5);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-para-ti:hover {
@@ -396,8 +397,8 @@ body {
 /* Botón flotante de música en la esquina */
 .floating-audio-btn {
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  right: max(20px, env(safe-area-inset-right, 20px));
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -413,6 +414,7 @@ body {
   pointer-events: auto;
   transition: all 0.3s ease;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .floating-audio-btn:hover {
@@ -427,13 +429,13 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.80);
   backdrop-filter: blur(8px);
   z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
@@ -446,6 +448,8 @@ body {
 
 .letter-wrapper {
   max-width: 580px;
+  max-height: 88vh;
+  overflow-y: auto;
   width: 100%;
   transform: translateY(30px) scale(0.95);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -615,24 +619,80 @@ body {
 }
 
 @media (max-width: 640px) {
-  .top-bar {
-    padding: 8px 16px;
+  .welcome-note-card {
+    padding: 14px 18px;
+    border-radius: 16px;
   }
-  .brand-title {
-    font-size: 1rem;
+  .welcome-main-text {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+  .welcome-sub-text {
+    font-size: 0.82rem;
+  }
+  .btn-para-ti {
+    padding: 12px 30px;
+    font-size: 1.02rem;
+    gap: 8px;
+  }
+  .navigation-hint span {
+    font-size: 0.72rem;
+    padding: 5px 12px;
+  }
+  .floating-audio-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.05rem;
   }
   .letter-card {
-    padding: 38px 24px 28px 24px;
+    padding: 34px 20px 24px 20px;
+    border-radius: 20px;
   }
   .letter-greeting {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
   .letter-body {
-    font-size: 1.2rem;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    line-height: 1.5;
   }
   .letter-signature {
-    font-size: 2rem;
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .welcome-note {
+    width: calc(100% - 20px);
+  }
+  .welcome-main-text {
+    font-size: 0.8rem;
+  }
+  .welcome-sub-text {
+    font-size: 0.75rem;
+  }
+  .btn-para-ti {
+    padding: 10px 24px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-height: 520px) {
+  .welcome-note {
+    top: 8px;
+    max-width: 380px;
+  }
+  .welcome-note-card {
+    padding: 8px 14px;
+  }
+  .action-container {
+    padding-bottom: 8px;
+  }
+  .btn-para-ti {
+    padding: 8px 24px;
+    font-size: 0.92rem;
+  }
+  .navigation-hint {
+    display: none;
   }
 }`;
 
@@ -680,8 +740,12 @@ export const STANDALONE_SCRIPT_JS = `/**
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x120a00, 0.012);
 
-    camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 15, 38);
+    const aspect = window.innerWidth / window.innerHeight;
+    const initialFov = aspect < 1 ? Math.min(74, 55 + (1 - aspect) * 26) : 55;
+    camera = new THREE.PerspectiveCamera(initialFov, aspect, 0.1, 1000);
+    const initialCamZ = aspect < 0.7 ? 48 : (aspect < 1 ? 44 : 38);
+    const initialCamY = aspect < 1 ? 18 : 15;
+    camera.position.set(0, initialCamY, initialCamZ);
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -689,6 +753,8 @@ export const STANDALONE_SCRIPT_JS = `/**
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.12;
     renderer.setClearColor(0x0a0500, 1);
+    renderer.domElement.style.touchAction = 'none';
+    container.style.touchAction = 'none';
     container.appendChild(renderer.domElement);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -1321,14 +1387,33 @@ export const STANDALONE_SCRIPT_JS = `/**
       if (e.key === 'Escape' && isLetterOpen) closeLetter();
     });
 
-    btnAudio.addEventListener('click', toggleAudio);
-    btnAutoRotate.addEventListener('click', () => {
-      controls.autoRotate = !controls.autoRotate;
-      btnAutoRotate.style.background = controls.autoRotate ? 'rgba(245, 158, 11, 0.25)' : 'rgba(255, 255, 255, 0.06)';
-    });
+    if (btnAudio) btnAudio.addEventListener('click', toggleAudio);
+    if (btnAutoRotate) {
+      btnAutoRotate.addEventListener('click', () => {
+        controls.autoRotate = !controls.autoRotate;
+        btnAutoRotate.style.background = controls.autoRotate ? 'rgba(245, 158, 11, 0.25)' : 'rgba(255, 255, 255, 0.06)';
+      });
+    }
+
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
 
     window.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.hud-overlay') || e.target.closest('#letter-modal')) return;
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      pointerStartTime = performance.now();
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      if (e.target.closest('.hud-overlay') || e.target.closest('#letter-modal') || e.target.closest('button')) return;
+
+      const dx = e.clientX - pointerStartX;
+      const dy = e.clientY - pointerStartY;
+      const moveDist = Math.hypot(dx, dy);
+      const elapsed = performance.now() - pointerStartTime;
+
+      if (moveDist > 12 || elapsed > 550) return;
 
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -1360,9 +1445,14 @@ export const STANDALONE_SCRIPT_JS = `/**
     });
 
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const currentAspect = w / h;
+      camera.aspect = currentAspect;
+      camera.fov = currentAspect < 1 ? Math.min(74, 55 + (1 - currentAspect) * 26) : 55;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
   }
 

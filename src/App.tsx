@@ -68,10 +68,11 @@ export default function App() {
         <WelcomeNote onClose={() => setShowWelcomeNote(false)} />
       )}
 
-      {/* Botón flotante discreto de música */}
+      {/* Botón flotante discreto de música adaptado con safe area */}
       <button
         onClick={handleToggleAudio}
-        className={`fixed bottom-6 right-6 z-30 p-3 rounded-full border backdrop-blur-md transition-all cursor-pointer shadow-lg ${
+        style={{ bottom: 'max(1.25rem, env(safe-area-inset-bottom, 1.25rem))' }}
+        className={`fixed right-4 sm:right-6 z-30 p-2.5 sm:p-3 rounded-full border backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-90 ${
           isAudioPlaying
             ? 'border-amber-400/50 bg-amber-950/60 text-amber-300 shadow-amber-500/20 hover:bg-amber-900/70'
             : 'border-white/15 bg-neutral-900/60 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/70'
@@ -80,27 +81,30 @@ export default function App() {
         aria-label="Control de música"
       >
         {isAudioPlaying ? (
-          <Volume2 size={18} className="animate-pulse text-amber-300" />
+          <Volume2 size={17} className="animate-pulse text-amber-300" />
         ) : (
-          <VolumeX size={18} />
+          <VolumeX size={17} />
         )}
       </button>
 
-      {/* 3. Indicador y botón interactivo "Para Ti" en la base - diseño limpio y simple */}
-      <div className="fixed bottom-7 left-0 right-0 z-20 flex flex-col items-center pointer-events-none px-4">
+      {/* 3. Indicador y botón interactivo "Para Ti" en la base adaptado con safe area */}
+      <div 
+        style={{ bottom: 'max(1.25rem, env(safe-area-inset-bottom, 1.25rem))' }}
+        className="fixed left-0 right-0 z-20 flex flex-col items-center pointer-events-none px-4"
+      >
         {/* Botón Central Simple y Elegante "Para Ti" */}
         <div className="pointer-events-auto">
           <button
             onClick={() => handleOpenLetter()}
-            className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-amber-400/90 hover:bg-amber-300 text-neutral-950 font-serif-display text-base font-semibold tracking-wide shadow-lg shadow-amber-500/25 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            className="group relative inline-flex items-center gap-2 sm:gap-2.5 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-amber-400/95 hover:bg-amber-300 text-neutral-950 font-serif-display text-sm sm:text-base font-semibold tracking-wide shadow-lg shadow-amber-500/25 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           >
-            <span className="text-amber-900 group-hover:scale-110 transition-transform">❦</span>
+            <span className="text-amber-900 group-hover:scale-110 transition-transform text-sm sm:text-base">❦</span>
             <span>Para Ti</span>
           </button>
         </div>
 
         {/* Guía muy discreta */}
-        <p className="mt-3 text-[11px] sm:text-xs text-white/40 tracking-wider font-light">
+        <p className="mt-2 sm:mt-2.5 text-[10px] sm:text-xs text-white/45 tracking-wider font-light text-center max-w-[260px] sm:max-w-none">
           Toca cualquier rosa o texto para leer su mensaje
         </p>
       </div>

@@ -29,14 +29,18 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x0e0614, 0.012);
 
-    // 2. CÁMARA
+    // 2. CÁMARA CON AJUSTE RESPONSIVO
+    const aspect = window.innerWidth / window.innerHeight;
+    const initialFov = aspect < 1 ? Math.min(74, 55 + (1 - aspect) * 26) : 55;
     const camera = new THREE.PerspectiveCamera(
-      55,
-      window.innerWidth / window.innerHeight,
+      initialFov,
+      aspect,
       0.1,
       1000
     );
-    camera.position.set(0, 16, 40);
+    const initialCamZ = aspect < 0.7 ? 48 : (aspect < 1 ? 44 : 40);
+    const initialCamY = aspect < 1 ? 18 : 16;
+    camera.position.set(0, initialCamY, initialCamZ);
     cameraRef.current = camera;
 
     // 3. RENDERIZADOR
@@ -50,6 +54,8 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.12;
     renderer.setClearColor(0x0a0410, 1);
+    renderer.domElement.style.touchAction = 'none';
+    container.style.touchAction = 'none';
     container.appendChild(renderer.domElement);
 
     // 4. CONTROLES DE ÓRBITA
@@ -657,14 +663,32 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     }
     scene.add(petalsGroup);
 
-    // 10. RAYCASTING PARA ABRIR LA CARTA AL CLICKEAR FLORES
+    // 10. RAYCASTING INTELIGENTE: DISTINGUE TAPS DE GESTOS DE ARRASTRE PARA MÓVILES
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
 
     const handlePointerDown = (e: PointerEvent) => {
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      pointerStartTime = performance.now();
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
       // Ignorar si el usuario interactuó con botones del DOM
       const target = e.target as HTMLElement;
-      if (target.closest('button') || target.closest('.no-raycast')) return;
+      if (target.closest('button') || target.closest('.no-raycast') || target.closest('input')) return;
+
+      // Calcular distancia recorrida por el dedo o ratón
+      const dx = e.clientX - pointerStartX;
+      const dy = e.clientY - pointerStartY;
+      const moveDist = Math.hypot(dx, dy);
+      const elapsedMs = performance.now() - pointerStartTime;
+
+      // Si el usuario movió más de 12px o sostuvo por más de 550ms, fue un arrastre de rotación/zoom, no un toque
+      if (moveDist > 12 || elapsedMs > 550) return;
 
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -703,12 +727,19 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     };
 
     window.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointerup', handlePointerUp);
 
-    // 11. REDIMENSIONAMIENTO
+    // 11. REDIMENSIONAMIENTO RESPONSIVO DINÁMICO
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const currentAspect = w / h;
+      camera.aspect = currentAspect;
+      // Ajuste de FOV en tiempo real para mantener todas las flores en pantalla en móviles y tablets
+      camera.fov = currentAspect < 1 ? Math.min(74, 55 + (1 - currentAspect) * 26) : 55;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     };
     window.addEventListener('resize', handleResize);
 
@@ -759,6 +790,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       if (container.contains(renderer.domElement)) {

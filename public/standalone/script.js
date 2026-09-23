@@ -48,14 +48,18 @@
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x120a00, 0.012);
 
-    // Cámara
+    // Cámara responsiva para cualquier relación de aspecto o dispositivo móvil
+    const aspect = window.innerWidth / window.innerHeight;
+    const initialFov = aspect < 1 ? Math.min(74, 55 + (1 - aspect) * 26) : 55;
     camera = new THREE.PerspectiveCamera(
-      55,
-      window.innerWidth / window.innerHeight,
+      initialFov,
+      aspect,
       0.1,
       1000
     );
-    camera.position.set(0, 15, 38);
+    const initialCamZ = aspect < 0.7 ? 48 : (aspect < 1 ? 44 : 38);
+    const initialCamY = aspect < 1 ? 18 : 15;
+    camera.position.set(0, initialCamY, initialCamZ);
 
     // Renderizador
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
@@ -64,6 +68,8 @@
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.12;
     renderer.setClearColor(0x0a0500, 1);
+    renderer.domElement.style.touchAction = 'none';
+    container.style.touchAction = 'none';
     container.appendChild(renderer.domElement);
 
     // Controles de órbita
@@ -748,16 +754,35 @@
     });
 
     // Botones de control
-    btnAudio.addEventListener('click', toggleAudio);
-    btnAutoRotate.addEventListener('click', () => {
-      controls.autoRotate = !controls.autoRotate;
-      btnAutoRotate.style.background = controls.autoRotate ? 'rgba(245, 158, 11, 0.25)' : 'rgba(255, 255, 255, 0.06)';
+    if (btnAudio) btnAudio.addEventListener('click', toggleAudio);
+    if (btnAutoRotate) {
+      btnAutoRotate.addEventListener('click', () => {
+        controls.autoRotate = !controls.autoRotate;
+        btnAutoRotate.style.background = controls.autoRotate ? 'rgba(245, 158, 11, 0.25)' : 'rgba(255, 255, 255, 0.06)';
+      });
+    }
+
+    // Clic / Tap inteligente en el canvas (Distingue giros de toques en móviles)
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
+
+    window.addEventListener('pointerdown', (e) => {
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      pointerStartTime = performance.now();
     });
 
-    // Clic en el canvas (Raycasting en flores 3D)
-    window.addEventListener('pointerdown', (e) => {
-      // Ignorar si se hizo clic en elementos DOM
-      if (e.target.closest('.hud-overlay') || e.target.closest('#letter-modal')) return;
+    window.addEventListener('pointerup', (e) => {
+      // Ignorar si se interactuó con botones o modales del DOM
+      if (e.target.closest('.hud-overlay') || e.target.closest('#letter-modal') || e.target.closest('button')) return;
+
+      const dx = e.clientX - pointerStartX;
+      const dy = e.clientY - pointerStartY;
+      const moveDist = Math.hypot(dx, dy);
+      const elapsed = performance.now() - pointerStartTime;
+
+      if (moveDist > 12 || elapsed > 550) return;
 
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -791,14 +816,19 @@
       }
     });
 
-    // Redimensionamiento de ventana
+    // Redimensionamiento de ventana dinámico
     window.addEventListener('resize', onWindowResize);
   }
 
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const currentAspect = w / h;
+    camera.aspect = currentAspect;
+    camera.fov = currentAspect < 1 ? Math.min(74, 55 + (1 - currentAspect) * 26) : 55;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   }
 
   // ==========================================
