@@ -1,0 +1,415 @@
+/* ============================================================
+   FLORES AMARILLAS - ESTILOS ROMÁNTICOS
+   ============================================================ */
+
+:root {
+  --gold-primary: #F59E0B;
+  --gold-bright: #FBBF24;
+  --gold-light: #FEF3C7;
+  --gold-dark: #B45309;
+  --parchment-bg: #FFFDF9;
+  --parchment-border: #D4AF37;
+  --text-dark: #292524;
+  --text-gold: #92400E;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #050505;
+  color: #FEF3C7;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  user-select: none;
+}
+
+/* Lienzo 3D */
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+/* Capa de interfaz (HUD) */
+.hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+/* Barra superior */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 10, 0.45);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 9999px;
+  padding: 10px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-sparkle {
+  color: #FBBF24;
+  font-size: 1.1rem;
+  animation: spinSlow 12s linear infinite;
+}
+
+.brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #FFFBEB, #FBBF24, #F59E0B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #FCD34D;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 2px 10px;
+  border-radius: 9999px;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #FEF3C7;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.btn-icon:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Indicador de ayuda de navegación */
+.navigation-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(254, 243, 199, 0.6);
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+/* Botón Destacado "PARA TI" */
+.action-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  padding-bottom: 20px;
+}
+
+.btn-para-ti {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+  color: #FFFBEB;
+  border: 2px solid #FDE68A;
+  padding: 16px 42px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.08em;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-para-ti:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 0 35px rgba(245, 158, 11, 0.85), 0 15px 35px rgba(0, 0, 0, 0.6);
+  border-color: #FFFFFF;
+}
+
+.btn-flower {
+  font-size: 1.4rem;
+  display: inline-block;
+  animation: pulseRotate 4s ease-in-out infinite;
+}
+
+.pulse-effect {
+  animation: buttonPulse 3s infinite;
+}
+
+/* MODAL DE LA CARTA */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.letter-wrapper {
+  max-width: 580px;
+  width: 100%;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.active .letter-wrapper {
+  transform: translateY(0) scale(1);
+}
+
+.letter-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FFFDF7 55%, #FBF4DE 100%);
+  color: var(--text-dark);
+  border: 3px double var(--parchment-border);
+  border-radius: 12px;
+  padding: 48px 42px 36px 42px;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8),
+              0 0 40px rgba(212, 175, 55, 0.3),
+              inset 0 0 60px rgba(245, 230, 185, 0.5);
+  overflow: hidden;
+}
+
+/* Adornos en esquinas */
+.corner-ornament {
+  position: absolute;
+  color: var(--parchment-border);
+  font-size: 1.4rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.corner-ornament.top-left { top: 14px; left: 16px; }
+.corner-ornament.top-right { top: 14px; right: 16px; transform: scaleX(-1); }
+.corner-ornament.bottom-left { bottom: 14px; left: 16px; transform: scaleY(-1); }
+.corner-ornament.bottom-right { bottom: 14px; right: 16px; transform: scale(-1); }
+
+/* Sello de cera */
+.wax-seal {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #F59E0B 0%, #B45309 85%);
+  border: 2px solid #FDE68A;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.5);
+}
+
+.seal-flower {
+  font-size: 1.4rem;
+}
+
+.letter-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.letter-date {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #B45309;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 8px;
+}
+
+.letter-greeting {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #78350F;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.gold-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+}
+
+.divider-icon {
+  color: #D4AF37;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+}
+
+/* Cuerpo de la carta */
+.letter-body {
+  margin: 28px 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: #451A03;
+  text-align: center;
+}
+
+.letter-paragraph {
+  margin-bottom: 18px;
+}
+
+.letter-signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #92400E;
+  margin-top: 24px;
+  display: block;
+  text-shadow: 0 1px 2px rgba(245, 158, 11, 0.2);
+}
+
+/* Pie de carta */
+.letter-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn-close {
+  background: #78350F;
+  color: #FEF3C7;
+  border: 1px solid #D4AF37;
+  padding: 10px 32px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-close:hover {
+  background: #92400E;
+  border-color: #FBBF24;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(120, 53, 15, 0.3);
+}
+
+/* ANIMACIONES */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseRotate {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(10deg); }
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(245, 158, 11, 0.8), 0 12px 30px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .top-bar {
+    padding: 8px 16px;
+  }
+  .brand-title {
+    font-size: 1rem;
+  }
+  .letter-card {
+    padding: 38px 24px 28px 24px;
+  }
+  .letter-greeting {
+    font-size: 1.8rem;
+  }
+  .letter-body {
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  .letter-signature {
+    font-size: 2rem;
+  }
+}

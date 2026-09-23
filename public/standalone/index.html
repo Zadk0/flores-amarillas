@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flores Amarillas - Para Mi Amor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js y OrbitControls vía CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Canvas Confetti opcional para celebración dorada -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- Contenedor del lienzo 3D -->
+  <div id="canvas-container"></div>
+
+  <!-- Interfaz de usuario flotante (HUD) -->
+  <div class="hud-overlay">
+    <!-- Barra superior -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-sparkle">✦</span>
+        <h1 class="brand-title">Flores Amarillas</h1>
+        <span class="brand-tag">Para Ti</span>
+      </div>
+      <div class="header-controls">
+        <button id="btn-audio" class="btn-icon" title="Música romántica ambiental">
+          <span class="icon" id="audio-icon">♪</span>
+          <span class="btn-label" id="audio-label">Música</span>
+        </button>
+        <button id="btn-autorotate" class="btn-icon" title="Rotación automática">
+          <span class="icon">⟳</span>
+          <span class="btn-label">Giro</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Indicador de navegación sutil -->
+    <div class="navigation-hint">
+      <span>Arrastra para girar · Rueda para zoom · Toca las flores</span>
+    </div>
+
+    <!-- Botón Destacado: PARA TI -->
+    <div class="action-container">
+      <button id="btn-open-letter" class="btn-para-ti pulse-effect">
+        <span class="btn-flower">🌻</span>
+        <span class="btn-text">Para Ti</span>
+        <span class="btn-shine"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal / Carta Emergente Romántica -->
+  <div id="letter-modal" class="modal-backdrop">
+    <div class="letter-wrapper">
+      <div class="letter-card parchment-effect">
+        <!-- Decoración esquinas doradas -->
+        <div class="corner-ornament top-left">❦</div>
+        <div class="corner-ornament top-right">❦</div>
+        <div class="corner-ornament bottom-left">❦</div>
+        <div class="corner-ornament bottom-right">❦</div>
+
+        <!-- Sello de cera / girasol -->
+        <div class="wax-seal">
+          <span class="seal-flower">🌻</span>
+        </div>
+
+        <div class="letter-header">
+          <span class="letter-date" id="letter-date-display">Septiembre de Flores Amarillas</span>
+          <h2 class="letter-greeting">Mi amor</h2>
+          <div class="gold-divider">
+            <span class="divider-line"></span>
+            <span class="divider-icon">✦ ❀ ✦</span>
+            <span class="divider-line"></span>
+          </div>
+        </div>
+
+        <!-- Mensaje de la carta -->
+        <div class="letter-body">
+          <p class="letter-paragraph">
+            Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.
+          </p>
+          <p class="letter-paragraph">
+            Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.
+          </p>
+          <p class="letter-signature">
+            Te amo mucho.
+          </p>
+        </div>
+
+        <!-- Botones de acción en la carta -->
+        <div class="letter-footer">
+          <button id="btn-close-letter" class="btn-close">
+            <span>Cerrar Carta</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script principal del universo 3D -->
+  <script src="script.js"></script>
+</body>
+</html>

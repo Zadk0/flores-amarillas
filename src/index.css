@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-serif-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  .font-script {
+    font-family: 'Dancing Script', cursive, serif;
+  }
+  .font-garamond {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  .font-sans-ui {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFE898 0%, #F5C542 25%, #E5A91E 50%, #FFF3B0 75%, #F59E0B 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 6s linear infinite;
+}
+
+.gold-border-glow {
+  box-shadow: 0 0 15px rgba(245, 197, 66, 0.35), 0 0 30px rgba(217, 119, 6, 0.2);
+}
+
+.parchment-paper {
+  background: radial-gradient(circle at 50% 50%, #FFFDF7 0%, #FBF6E9 70%, #F5ECCE 100%);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(217, 119, 6, 0.25);
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+@keyframes pulseGold {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(245, 197, 66, 0.4), 0 0 35px rgba(217, 119, 6, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(245, 197, 66, 0.7), 0 0 55px rgba(217, 119, 6, 0.45);
+  }
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 2.5s infinite;
+}
