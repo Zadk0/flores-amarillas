@@ -2,5 +2,7 @@
   "name": "Flores Amarillas - Universo Romántico 3D",
   "description": "Experiencia 3D inmersiva con Three.js de flores amarillas, galaxia dorada interactiva y carta de amor.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

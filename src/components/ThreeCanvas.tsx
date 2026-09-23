@@ -25,9 +25,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     if (!containerRef.current) return;
     const container = containerRef.current;
 
-    // 1. ESCENA & NIEBLA CÓSMICA (Fondo con matiz violeta profundo místico)
+    // 1. ESCENA & NIEBLA CÓSMICA (Noche cálida con ligero velo violeta sutil de fondo)
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0a0514, 0.012);
+    scene.fog = new THREE.FogExp2(0x0e0614, 0.012);
 
     // 2. CÁMARA
     const camera = new THREE.PerspectiveCamera(
@@ -48,8 +48,8 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-    renderer.setClearColor(0x080410, 1);
+    renderer.toneMappingExposure = 1.12;
+    renderer.setClearColor(0x0a0410, 1);
     container.appendChild(renderer.domElement);
 
     // 4. CONTROLES DE ÓRBITA
@@ -63,71 +63,84 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     controls.autoRotateSpeed = 0.6;
     controlsRef.current = controls;
 
-    // 5. ILUMINACIÓN ROMÁNTICA: CÁLIDA, SUAVE Y EQUILIBRADA (SIN BRILLO EXCESIVO)
-    const ambientLight = new THREE.AmbientLight(0xfff5e6, 0.85);
+    // 5. ILUMINACIÓN: DOMINANTE AMARILLA Y DORADA RADIANTE CON TOQUES MORADOS ELEGANTES
+    const ambientLight = new THREE.AmbientLight(0xfef08a, 0.88);
     scene.add(ambientLight);
 
-    // Luz cálida central moderada y natural para las rosas
-    const centerPointLight = new THREE.PointLight(0xfcd34d, 2.2, 50, 1.2);
-    centerPointLight.position.set(0, 5, 0);
+    // Luz cálida central intensa y dorada para las rosas
+    const centerPointLight = new THREE.PointLight(0xffea00, 3.2, 60, 1.1);
+    centerPointLight.position.set(0, 6, 0);
     scene.add(centerPointLight);
 
-    // Luz lateral suave
-    const goldRimLight = new THREE.DirectionalLight(0xfef3c7, 0.9);
-    goldRimLight.position.set(25, 30, 20);
-    scene.add(goldRimLight);
+    // Luz solar dorada envolvente
+    const goldMainLight = new THREE.DirectionalLight(0xfde047, 1.7);
+    goldMainLight.position.set(25, 30, 20);
+    scene.add(goldMainLight);
 
-    // Luz de contraste morado suave para dar profundidad
-    const purpleAccentLight = new THREE.DirectionalLight(0x9333ea, 0.45);
-    purpleAccentLight.position.set(-25, 15, -25);
+    // Luz secundaria cálida de relleno
+    const goldFillLight = new THREE.DirectionalLight(0xf59e0b, 1.1);
+    goldFillLight.position.set(-25, 15, -20);
+    scene.add(goldFillLight);
+
+    // Toque de acento morado/violeta que contrasta elegantemente con el amarillo
+    const purpleAccentLight = new THREE.DirectionalLight(0xa855f7, 0.75);
+    purpleAccentLight.position.set(-20, 25, 20);
     scene.add(purpleAccentLight);
 
-    const deepVioletFill = new THREE.PointLight(0x6b21a8, 1.2, 40, 1.8);
-    deepVioletFill.position.set(0, -12, 10);
-    scene.add(deepVioletFill);
+    // Halo violeta místico desde abajo
+    const warmVioletUnderLight = new THREE.PointLight(0xc084fc, 1.4, 50, 1.6);
+    warmVioletUnderLight.position.set(0, -10, 10);
+    scene.add(warmVioletUnderLight);
 
-    // 6. GALAXIA ESPIRAL DORADA CON POLVO CÓSMICO MORADO/VIOLETA
-    const particleCount = 8500;
+    // 6. GALAXIA CÓSMICA RADIANTE AMARILLA Y DORADA CON TOQUES MORADOS
+    const particleCount = 10000;
     const galaxyGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
-    // Colores: El núcleo e interior son AMARILLO VIBRANTE Y ORO
-    // Los bordes exteriores tienen un halo morado/púrpura elegante que hace resaltar el amarillo
-    const colorCenter = new THREE.Color(0xffffff); // Blanco incandescente
-    const colorCore = new THREE.Color(0xffea00);   // Amarillo intenso radiante
-    const colorMid = new THREE.Color(0xf59e0b);    // Ámbar dorado
-    const colorVioletArm = new THREE.Color(0x9333ea); // Violeta místico
-    const colorDeepPurple = new THREE.Color(0x581c87); // Púrpura cósmico profundo
+    // Paleta cósmica: 80% AMARILLO/ORO radiante, con un halo exterior de polvo morado/violeta
+    const colorCenter = new THREE.Color(0xffffff);     // Blanco resplandor núcleo
+    const colorBrightYellow = new THREE.Color(0xfff033); // Amarillo vivo radiante
+    const colorPureGold = new THREE.Color(0xfacc15);     // Oro floral
+    const colorAmber = new THREE.Color(0xf59e0b);        // Ámbar cálido
+    const colorVioletAccent = new THREE.Color(0xa855f7); // Toque morado/violeta en bordes estelares
+    const colorDeepPurple = new THREE.Color(0x6b21a8);   // Morado profundo
 
     const arms = 3;
-    const maxRadius = 40;
+    const maxRadius = 42;
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
-      const r = Math.pow(Math.random(), 2) * maxRadius;
-      const spinAngle = r * 0.42;
+      const r = Math.pow(Math.random(), 1.7) * maxRadius;
+      const spinAngle = r * 0.44;
       const branchAngle = ((i % arms) * ((2 * Math.PI) / arms));
 
-      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.45) * r;
-      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.35) * (r * 0.35);
-      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.45) * r;
+      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.48) * r;
+      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.40) * (r * 0.38);
+      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.48) * r;
 
       positions[i3] = Math.cos(branchAngle + spinAngle) * r + randomX;
       positions[i3 + 1] = randomY - 2;
       positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
 
-      // Color: El 70% del volumen es intensamente AMARILLO/DORADO; las estrellas lejanas toman matices púrpura
-      const mixedColor = colorCore.clone();
+      // El núcleo y todo el cuerpo principal son intensamente AMARILLOS;
+      // las estrellas exteriores y el polvo estelar adquieren sutiles destellos morados
+      const mixedColor = colorBrightYellow.clone();
       const t = r / maxRadius;
-      if (t < 0.2) {
-        mixedColor.lerp(colorCenter, (0.2 - t) / 0.2); // Núcleo
-      } else if (t < 0.6) {
-        mixedColor.lerp(colorMid, (t - 0.2) / 0.4); // Amarillo / dorado cálido
-      } else if (t < 0.82) {
-        mixedColor.lerp(colorVioletArm, (t - 0.6) / 0.22);
+      if (t < 0.12) {
+        mixedColor.copy(colorCenter).lerp(colorBrightYellow, t / 0.12);
+      } else if (t < 0.55) {
+        mixedColor.copy(colorBrightYellow).lerp(colorPureGold, (t - 0.12) / 0.43);
+      } else if (t < 0.80) {
+        mixedColor.copy(colorPureGold).lerp(colorAmber, (t - 0.55) / 0.25);
       } else {
-        mixedColor.lerp(colorDeepPurple, (t - 0.82) / 0.18);
+        // Toques morados en los confines exteriores de la galaxia
+        mixedColor.copy(colorAmber).lerp(colorVioletAccent, (t - 0.80) / 0.20);
+      }
+
+      // 1 de cada 8 estrellas en los brazos tiene un destello violeta directo
+      if (i % 8 === 0 && t > 0.35) {
+        mixedColor.lerp(colorVioletAccent, 0.65);
       }
 
       colors[i3] = mixedColor.r;
@@ -138,22 +151,22 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     galaxyGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     galaxyGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    // Textura de partícula generada con Canvas suave
+    // Textura de partícula dorada y brillante con halo sutil
     const starCanvas = document.createElement('canvas');
     starCanvas.width = 64;
     starCanvas.height = 64;
     const sCtx = starCanvas.getContext('2d')!;
     const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    sGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-    sGrad.addColorStop(0.3, 'rgba(254, 240, 138, 0.65)');
-    sGrad.addColorStop(0.7, 'rgba(245, 158, 11, 0.2)');
+    sGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+    sGrad.addColorStop(0.25, 'rgba(254, 240, 138, 0.85)');
+    sGrad.addColorStop(0.65, 'rgba(216, 180, 254, 0.35)'); // Toque violeta translúcido
     sGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     sCtx.fillStyle = sGrad;
     sCtx.fillRect(0, 0, 64, 64);
     const starTexture = new THREE.CanvasTexture(starCanvas);
 
     const galaxyMat = new THREE.PointsMaterial({
-      size: 0.46,
+      size: 0.54,
       map: starTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -401,31 +414,32 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       canvas.height = 190;
       const ctx = canvas.getContext('2d')!;
 
-      // Fondo oscuro elegante con halo ámbar
+      // Fondo oscuro elegante ambarino con reflejo violeta tenue
       const bgGrad = ctx.createLinearGradient(0, 0, 720, 190);
-      bgGrad.addColorStop(0, 'rgba(25, 18, 5, 0.82)');
-      bgGrad.addColorStop(0.5, 'rgba(48, 28, 6, 0.94)');
-      bgGrad.addColorStop(1, 'rgba(25, 18, 5, 0.82)');
+      bgGrad.addColorStop(0, 'rgba(24, 14, 18, 0.88)');
+      bgGrad.addColorStop(0.5, 'rgba(42, 22, 16, 0.94)');
+      bgGrad.addColorStop(1, 'rgba(24, 14, 18, 0.88)');
       ctx.fillStyle = bgGrad;
       ctx.roundRect(16, 16, 688, 158, 36);
       ctx.fill();
 
-      // Borde dorado suave
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
+      // Borde dorado cálido
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.90)';
       ctx.lineWidth = 3.5;
       ctx.stroke();
 
-      // Destellos discretos
-      ctx.fillStyle = '#FDE68A';
+      // Destellos: uno dorado y otro violeta suave
+      ctx.fillStyle = '#C084FC';
       ctx.font = '24px serif';
       ctx.fillText('✦', 36, 96);
+      ctx.fillStyle = '#FDE68A';
       ctx.fillText('✦', 684, 96);
 
-      // Texto dinámico con ajuste inteligente si es largo
+      // Texto dinámico amarillo brillante con sombra violeta/dorada de ensueño
       ctx.fillStyle = '#FEF08A';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'rgba(245, 158, 11, 0.7)';
+      ctx.shadowColor = 'rgba(217, 70, 239, 0.7)';
       ctx.shadowBlur = 14;
 
       if (text.length > 28) {
@@ -459,85 +473,85 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const orbitingGroup = new THREE.Group();
     const celestialPairs = [
       {
-        text: "Eres la mujer de mis sueños, siempre quiero estar a tu lado",
+        text: "ME ENCANTAS BB",
         r: 11.0,
         a: 0.4,
         y: 1.5,
         s: 0.88,
         letter: {
           title: "Mi Amor Eterno",
-          tagline: "El Sueño Más Hermoso",
+          tagline: "ME ENCANTAS BB",
           textParagraph1: "Eres la mujer de mis sueños, siempre quiero estar a tu lado.",
           textParagraph2: "Desde que llegaste a mi vida no hay un solo instante en que no agradezca tenerte; eres mi felicidad entera.",
           signature: "Siempre a tu lado, por y para siempre."
         }
       },
       {
-        text: "Me encantas de pies a cabeza amor de mi vida",
+        text: "TE ADORO",
         r: 14.5,
         a: 1.45,
         y: -1.2,
         s: 0.82,
         letter: {
           title: "Amor de mi Vida",
-          tagline: "Fascinación Total",
+          tagline: "TE ADORO",
           textParagraph1: "Me encantas de pies a cabeza amor de mi vida.",
           textParagraph2: "Tu mirada, tu sonrisa, tu manera de ser y cada detalle tuyo me enamoran cada día más y más.",
           signature: "Completamente loco por ti."
         }
       },
       {
-        text: "Me haces tan feliz corazon de melon",
+        text: "ME FASCINAS",
         r: 12.2,
         a: 2.5,
         y: 2.2,
         s: 0.90,
         letter: {
           title: "Corazón de Melón",
-          tagline: "Mi Alegría Inmensa",
-          textParagraph1: "Me haces tan feliz corazón de melón.",
+          tagline: "ME FASCINAS",
+          textParagraph1: "Me haces tan feliz corazon de melon.",
           textParagraph2: "A tu lado cada día se llena de risas, ternura y un color amarillo brillante lleno de amor.",
           signature: "Tu felicidad es la mía."
         }
       },
       {
-        text: "Eres la mejor novia del mundo mundial",
+        text: "TE AMO",
         r: 15.6,
         a: 3.6,
         y: 0.5,
         s: 0.86,
         letter: {
           title: "Mi Princesa Hermosa",
-          tagline: "La Mejor de Todas",
+          tagline: "TE AMO",
           textParagraph1: "Eres la mejor novia del mundo mundial.",
           textParagraph2: "No existe en ningún rincón del planeta alguien tan tierna, linda, comprensiva y perfecta como tú.",
           signature: "El novio más afortunado del universo."
         }
       },
       {
-        text: "Estas muy chula amorcito chula",
+        text: "ERES HERMOSA",
         r: 13.0,
         a: 4.65,
         y: -2.0,
         s: 0.80,
         letter: {
           title: "Amorcito Chula",
-          tagline: "Belleza Pura",
-          textParagraph1: "Estás muy chula amorcito chula.",
+          tagline: "ERES HERMOSA",
+          textParagraph1: "Estas muy chula amorcito chula.",
           textParagraph2: "Eres la más preciosa de todas, una florecita resplandeciente que ilumina todo a su alrededor.",
           signature: "Para la más chula de mi corazón."
         }
       },
       {
-        text: "Gracias por siempre estar conmigo siempre, TE AMOOOOO",
+        text: "ESTAS MUY DELII",
         r: 16.5,
         a: 5.6,
         y: 1.8,
         s: 0.88,
         letter: {
           title: "Mi Amor Incondicional",
-          tagline: "Gratitud y Pasión",
-          textParagraph1: "Gracias por siempre estar conmigo siempre, ¡TE AMOOOOO!",
+          tagline: "ESTAS MUY DELII",
+          textParagraph1: "Gracias por siempre estar conmigo siempre, TE AMOOOOO.",
           textParagraph2: "Gracias por tu apoyo, por tus abrazos cálidos y por hacerme sentir tan amado en cada segundo de la vida.",
           signature: "¡Te amooooo con todas mis fuerzas!"
         }
@@ -589,33 +603,50 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
 
     const petalGeo = new THREE.ShapeGeometry(petalShape);
     
-    // Pétalo amarillo principal (85% de los pétalos)
+    // Pétalo amarillo dorado cálido principal (80%)
     const petalMatYellow = new THREE.MeshStandardMaterial({
       color: 0xfacc15,
-      roughness: 0.55,
+      roughness: 0.5,
       metalness: 0.02,
-      emissive: 0x92400e,
-      emissiveIntensity: 0.12,
+      emissive: 0xb45309,
+      emissiveIntensity: 0.16,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.94
+    });
+
+    // Pétalo amarillo brillante cálido de acento
+    const petalMatBrightYellow = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      roughness: 0.48,
+      metalness: 0.02,
+      emissive: 0xd97706,
+      emissiveIntensity: 0.20,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.92
     });
 
-    // Pétalo lila/morado sutil de contraste (15% de los pétalos)
-    const petalMatPurple = new THREE.MeshStandardMaterial({
+    // Toque especial: Pétalo lila/violeta elegante (20%)
+    const petalMatPurpleAccent = new THREE.MeshStandardMaterial({
       color: 0xc084fc,
-      roughness: 0.58,
-      metalness: 0.02,
-      emissive: 0x581c87,
-      emissiveIntensity: 0.12,
+      roughness: 0.52,
+      metalness: 0.03,
+      emissive: 0x6b21a8,
+      emissiveIntensity: 0.25,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.88
     });
 
-    for (let i = 0; i < 95; i++) {
-      const isPurple = i % 7 === 0; // Solo 1 de cada 7 es morado (el amarillo resalta mucho más)
-      const p = new THREE.Mesh(petalGeo, isPurple ? petalMatPurple : petalMatYellow);
+    for (let i = 0; i < 115; i++) {
+      let mat = petalMatYellow;
+      if (i % 5 === 0) {
+        mat = petalMatPurpleAccent; // 20% toques morados
+      } else if (i % 3 === 0) {
+        mat = petalMatBrightYellow;
+      }
+      const p = new THREE.Mesh(petalGeo, mat);
       const rad = 3 + Math.random() * 25;
       const theta = Math.random() * Math.PI * 2;
       p.position.set(

@@ -54,7 +54,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#060402] text-amber-50 select-none font-sans-ui">
+    <div className="relative w-screen h-screen overflow-hidden bg-[#070401] text-amber-50 select-none font-sans-ui">
       {/* 1. Lienzo Three.js 3D a pantalla completa */}
       <ThreeCanvas
         onOpenLetter={handleOpenLetter}
