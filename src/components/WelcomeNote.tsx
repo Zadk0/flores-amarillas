@@ -25,7 +25,7 @@ export const WelcomeNote: React.FC<WelcomeNoteProps> = ({ onClose }) => {
 
   return (
     <div
-      className={`fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-md transition-all duration-500 ease-out ${
+      className={`fixed top-6 sm:top-8 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-md transition-all duration-500 ease-out ${
         isVisible
           ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
           : 'opacity-0 -translate-y-4 scale-95 pointer-events-none'

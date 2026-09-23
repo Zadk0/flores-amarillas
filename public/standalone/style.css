@@ -33,7 +33,7 @@ body {
 /* Recuadro morado claro de bienvenida sobrepuesto */
 .welcome-note {
   position: absolute;
-  top: 88px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
@@ -284,6 +284,34 @@ body {
 
 .pulse-effect {
   animation: buttonPulse 3s infinite;
+}
+
+/* Botón flotante de música en la esquina */
+.floating-audio-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(20, 15, 10, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fbbf24;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.floating-audio-btn:hover {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: scale(1.08);
 }
 
 /* MODAL DE LA CARTA */

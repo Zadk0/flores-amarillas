@@ -20,25 +20,6 @@
 
   <!-- Interfaz de usuario flotante (HUD) -->
   <div class="hud-overlay">
-    <!-- Barra superior -->
-    <header class="top-bar">
-      <div class="brand">
-        <span class="brand-sparkle">✦</span>
-        <h1 class="brand-title">Flores Amarillas</h1>
-        <span class="brand-tag">Para Ti</span>
-      </div>
-      <div class="header-controls">
-        <button id="btn-audio" class="btn-icon" title="Música romántica ambiental">
-          <span class="icon" id="audio-icon">♪</span>
-          <span class="btn-label" id="audio-label">Música</span>
-        </button>
-        <button id="btn-autorotate" class="btn-icon" title="Rotación automática">
-          <span class="icon">⟳</span>
-          <span class="btn-label">Giro</span>
-        </button>
-      </div>
-    </header>
-
     <!-- Recuadro sobrepuesto morado claro de bienvenida -->
     <div id="welcome-note" class="welcome-note">
       <div class="welcome-note-card">
@@ -61,7 +42,7 @@
       <span>Arrastra para girar · Rueda para zoom · Toca las flores</span>
     </div>
 
-    <!-- Botón Destacado: PARA TI -->
+    <!-- Botón Destacado: PARA TI en la parte inferior -->
     <div class="action-container">
       <button id="btn-open-letter" class="btn-para-ti pulse-effect">
         <span class="btn-flower">❦</span>
@@ -69,6 +50,11 @@
         <span class="btn-shine"></span>
       </button>
     </div>
+
+    <!-- Botón flotante discreto de música en la esquina -->
+    <button id="btn-audio" class="floating-audio-btn" title="Música romántica ambiental">
+      <span id="audio-icon">♪</span>
+    </button>
   </div>
 
   <!-- Modal / Carta Emergente Romántica -->

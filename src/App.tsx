@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { ThreeCanvas } from './components/ThreeCanvas';
-import { TopBar } from './components/TopBar';
 import { LetterModal, LetterDetail } from './components/LetterModal';
 import { DownloadModal } from './components/DownloadModal';
 import { WelcomeNote } from './components/WelcomeNote';
@@ -63,21 +63,28 @@ export default function App() {
         onPresetReset={() => setCameraPreset(null)}
       />
 
-      {/* 2. Top Bar conforme al contrato de diseño */}
-      <TopBar
-        isAudioPlaying={isAudioPlaying}
-        onToggleAudio={handleToggleAudio}
-        autoRotate={autoRotate}
-        onToggleAutoRotate={() => setAutoRotate((prev) => !prev)}
-        onSelectCameraPreset={(preset) => setCameraPreset(preset)}
-        onOpenLetter={handleOpenLetter}
-        onOpenDownload={() => setIsDownloadOpen(true)}
-      />
-
       {/* Recuadro de bienvenida sobrepuesto morado claro */}
       {showWelcomeNote && (
         <WelcomeNote onClose={() => setShowWelcomeNote(false)} />
       )}
+
+      {/* Botón flotante discreto de música */}
+      <button
+        onClick={handleToggleAudio}
+        className={`fixed bottom-6 right-6 z-30 p-3 rounded-full border backdrop-blur-md transition-all cursor-pointer shadow-lg ${
+          isAudioPlaying
+            ? 'border-amber-400/50 bg-amber-950/60 text-amber-300 shadow-amber-500/20 hover:bg-amber-900/70'
+            : 'border-white/15 bg-neutral-900/60 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/70'
+        }`}
+        title={isAudioPlaying ? 'Silenciar música' : 'Reproducir música'}
+        aria-label="Control de música"
+      >
+        {isAudioPlaying ? (
+          <Volume2 size={18} className="animate-pulse text-amber-300" />
+        ) : (
+          <VolumeX size={18} />
+        )}
+      </button>
 
       {/* 3. Indicador y botón interactivo "Para Ti" en la base - diseño limpio y simple */}
       <div className="fixed bottom-7 left-0 right-0 z-20 flex flex-col items-center pointer-events-none px-4">
