@@ -24,6 +24,11 @@
   const audioIcon = document.getElementById('audio-icon');
   const audioLabel = document.getElementById('audio-label');
   const btnAutoRotate = document.getElementById('btn-autorotate');
+  const letterGreetingDisplay = document.getElementById('letter-greeting-display');
+  const letterDateDisplay = document.getElementById('letter-date-display');
+  const letterParagraph1 = document.getElementById('letter-paragraph-1');
+  const letterParagraph2 = document.getElementById('letter-paragraph-2');
+  const letterSignatureDisplay = document.getElementById('letter-signature-display');
 
   // Inicialización
   initThree();
@@ -329,39 +334,137 @@
     centralFlowerGroup = createYellowRose(1.5, true);
     centralFlowerGroup.position.set(0, 2, 0);
     centralFlowerGroup.rotation.x = 0.35;
+    centralFlowerGroup.userData = {
+      isCenter: true,
+      letterDetail: {
+        title: "Mi amor eterno",
+        tagline: "Rosa Dorada Central",
+        textParagraph1: "En el corazón de todo este universo cósmico, esta gran flor amarilla resplandece solo por ti.",
+        textParagraph2: "Tu amor es mi centro, mi paz y la luz dorada que ilumina cada segundo de mi vida.",
+        signature: "Siempre tuyo con todo mi corazón."
+      }
+    };
     scene.add(centralFlowerGroup);
-
-    centralFlowerGroup.userData = { isCenter: true };
     interactiveObjects.push(centralFlowerGroup);
 
-    // 2. Rosas Amarillas Orbitando alrededor
+    // 2. Rosas y palabras en conjunto orbital unificado con frases únicas
     flowersOrbitGroup = new THREE.Group();
-    const flowerPositions = [
-      { radius: 10.5, angle: 0.4, y: 1.5, scale: 0.88 },
-      { radius: 13.8, angle: 1.6, y: -1.2, scale: 0.78 },
-      { radius: 11.5, angle: 2.8, y: 2.4, scale: 0.92 },
-      { radius: 14.8, angle: 3.9, y: 0.5, scale: 0.84 },
-      { radius: 12.2, angle: 4.9, y: -2.1, scale: 0.76 },
-      { radius: 15.5, angle: 5.8, y: 1.8, scale: 0.86 }
+    const flowerPairs = [
+      {
+        text: "Mi amor",
+        radius: 10.5,
+        angle: 0.4,
+        y: 1.5,
+        scale: 0.88,
+        letter: {
+          title: "Mi gran amor",
+          tagline: "Constelación de Ternura",
+          textParagraph1: "Amarte es la aventura más dulce y hermosa que el destino pudo regalarme.",
+          textParagraph2: "Cada latido de mi corazón lleva tu nombre, y hoy celebro tu existencia con estas rosas doradas.",
+          signature: "Con todo mi amor infinito."
+        }
+      },
+      {
+        text: "Eres mi sol",
+        radius: 14.0,
+        angle: 1.5,
+        y: -1.2,
+        scale: 0.78,
+        letter: {
+          title: "Eres mi sol",
+          tagline: "Luz Cálida y Radiante",
+          textParagraph1: "Como el sol de primavera que despierta las flores amarillas, tú iluminas hasta mis días más grises.",
+          textParagraph2: "Tu calidez me abriga el alma y tu sonrisa me devuelve la fe en todo lo bueno.",
+          signature: "Brillas en mi vida para siempre."
+        }
+      },
+      {
+        text: "Te amo",
+        radius: 11.8,
+        angle: 2.7,
+        y: 2.2,
+        scale: 0.92,
+        letter: {
+          title: "Te amo con el alma",
+          tagline: "Promesa en Amarillo",
+          textParagraph1: "Decir 'te amo' se queda pequeño ante la inmensidad de lo que despiertas en mí.",
+          textParagraph2: "Te amo en cada silencio, en cada carcajada y en cada sueño que construimos juntos.",
+          signature: "Te amo hoy más que ayer y menos que mañana."
+        }
+      },
+      {
+        text: "Eres preciosa",
+        radius: 15.2,
+        angle: 3.8,
+        y: 0.5,
+        scale: 0.84,
+        letter: {
+          title: "Eres preciosa",
+          tagline: "Belleza Pura y Singular",
+          textParagraph1: "No solo cautivas mis ojos con tu belleza única; cautivas mi espíritu con tu bondad y dulzura.",
+          textParagraph2: "Eres el poema más lindo que la vida jamás escribió, perfecta en cada detalle.",
+          signature: "Cautivado por tu encanto."
+        }
+      },
+      {
+        text: "Mi rosa favorita",
+        radius: 12.5,
+        angle: 4.8,
+        y: -2.0,
+        scale: 0.78,
+        letter: {
+          title: "Mi flor favorita",
+          tagline: "Flor de Oro y Amor",
+          textParagraph1: "Entre millones de flores en este infinito jardín, mis ojos y mi corazón siempre te eligen a ti.",
+          textParagraph2: "Tu delicadeza, tu aroma y tu esencia hacen que el mundo entero florezca a tu alrededor.",
+          signature: "Para la rosa más bella de mi jardín."
+        }
+      },
+      {
+        text: "Luz de mis días",
+        radius: 16.0,
+        angle: 5.7,
+        y: 1.8,
+        scale: 0.86,
+        letter: {
+          title: "Luz de mis días",
+          tagline: "Guía y Destello Dorado",
+          textParagraph1: "Gracias por ser ese faro de esperanza, ternura y alegría incondicional en mi camino.",
+          textParagraph2: "Tenerte a mi lado convierte lo cotidiano en un milagro dorado lleno de felicidad.",
+          signature: "Gracias por existir e iluminarme."
+        }
+      }
     ];
 
-    flowerPositions.forEach((pos, idx) => {
+    flowerPairs.forEach((pos, idx) => {
+      const pairGroup = new THREE.Group();
+
       const flower = createYellowRose(pos.scale, false);
-      flower.position.set(
+      flower.rotation.x = 0.28 + (idx * 0.05);
+      flower.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
+      pairGroup.add(flower);
+
+      const textSprite = createTextSprite(pos.text);
+      textSprite.position.set(0, 3.2 * pos.scale + 0.9, 0);
+      pairGroup.add(textSprite);
+
+      pairGroup.position.set(
         Math.cos(pos.angle) * pos.radius,
         pos.y,
         Math.sin(pos.angle) * pos.radius
       );
-      flower.rotation.x = 0.28 + (idx * 0.05);
-      flower.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
-      flower.userData = {
+
+      pairGroup.userData = {
         baseRadius: pos.radius,
         baseAngle: pos.angle,
-        speed: 0.15 + (idx * 0.03),
-        floatOffset: idx * 1.2
+        baseY: pos.y,
+        speed: 0.12 + (idx * 0.02),
+        floatOffset: idx * 1.3,
+        letterDetail: pos.letter
       };
-      flowersOrbitGroup.add(flower);
-      interactiveObjects.push(flower);
+
+      flowersOrbitGroup.add(pairGroup);
+      interactiveObjects.push(pairGroup);
     });
 
     scene.add(flowersOrbitGroup);
@@ -398,7 +501,7 @@
     ctx.fillText('✦', 458, 88);
 
     // Tipografía caligráfica / serifa
-    ctx.font = 'italic 52px "Playfair Display", Georgia, serif';
+    ctx.font = 'italic 50px "Playfair Display", Georgia, serif';
     ctx.fillStyle = accent;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -419,32 +522,7 @@
   }
 
   function createFloatingTexts() {
-    floatingTextsGroup = new THREE.Group();
-
-    const romanticPhrases = [
-      { text: "Mi amor", dist: 8.5, angle: 0.6, y: 4.8 },
-      { text: "Eres mi sol", dist: 12.0, angle: 1.8, y: -2.5 },
-      { text: "Te amo", dist: 9.0, angle: 3.2, y: 3.8 },
-      { text: "Eres preciosa", dist: 13.5, angle: 4.3, y: 1.5 },
-      { text: "Mi rosa favorita", dist: 11.0, angle: 5.4, y: -3.2 },
-      { text: "Luz de mis días", dist: 14.5, angle: 2.5, y: 5.2 }
-    ];
-
-    romanticPhrases.forEach((item, index) => {
-      const sprite = createTextSprite(item.text);
-      sprite.position.x = Math.cos(item.angle) * item.dist;
-      sprite.position.z = Math.sin(item.angle) * item.dist;
-      sprite.position.y = item.y;
-      sprite.userData = {
-        baseY: item.y,
-        floatSpeed: 1.2 + (index * 0.2),
-        dist: item.dist,
-        angle: item.angle
-      };
-      floatingTextsGroup.add(sprite);
-    });
-
-    scene.add(floatingTextsGroup);
+    // Los textos ahora viajan integrados en conjunto con las rosas en flowersOrbitGroup
   }
 
   // ==========================================
@@ -583,9 +661,24 @@
   // ==========================================
   // EVENTOS E INTERACCIÓN
   // ==========================================
-  function openLetter() {
+  function openLetter(detail) {
     isLetterOpen = true;
     letterModal.classList.add('active');
+
+    // Actualizar contenido con la frase específica de la flor o palabra
+    if (detail) {
+      if (letterGreetingDisplay) letterGreetingDisplay.textContent = detail.title || "Mi amor";
+      if (letterDateDisplay) letterDateDisplay.textContent = detail.tagline || "Septiembre de Flores Amarillas";
+      if (letterParagraph1) letterParagraph1.textContent = detail.textParagraph1 || "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
+      if (letterParagraph2) letterParagraph2.textContent = detail.textParagraph2 || "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
+      if (letterSignatureDisplay) letterSignatureDisplay.textContent = detail.signature || "Te amo mucho.";
+    } else {
+      if (letterGreetingDisplay) letterGreetingDisplay.textContent = "Mi amor";
+      if (letterDateDisplay) letterDateDisplay.textContent = "Septiembre de Flores Amarillas";
+      if (letterParagraph1) letterParagraph1.textContent = "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
+      if (letterParagraph2) letterParagraph2.textContent = "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
+      if (letterSignatureDisplay) letterSignatureDisplay.textContent = "Te amo mucho.";
+    }
 
     // Confetti dorado si está disponible la librería
     if (typeof confetti === 'function') {
@@ -610,7 +703,7 @@
 
   function setupEvents() {
     // Botón principal "Para Ti"
-    btnOpenLetter.addEventListener('click', openLetter);
+    btnOpenLetter.addEventListener('click', () => openLetter());
     btnCloseLetter.addEventListener('click', closeLetter);
 
     // Cerrar al hacer clic en el fondo oscuro
@@ -642,20 +735,27 @@
       const intersects = raycaster.intersectObjects(scene.children, true);
 
       if (intersects.length > 0) {
-        // Verificar si se tocó alguna flor o el centro
+        // Verificar si se tocó alguna flor o el centro y extraer su frase
         let hitObject = intersects[0].object;
         let isFlowerHit = false;
+        let foundDetail = null;
 
         while (hitObject.parent && hitObject.parent !== scene) {
-          if (hitObject === centralFlowerGroup || hitObject.userData?.baseRadius) {
+          if (hitObject === centralFlowerGroup) {
             isFlowerHit = true;
+            foundDetail = centralFlowerGroup.userData?.letterDetail;
+            break;
+          }
+          if (hitObject.userData?.letterDetail) {
+            isFlowerHit = true;
+            foundDetail = hitObject.userData.letterDetail;
             break;
           }
           hitObject = hitObject.parent;
         }
 
         if (isFlowerHit) {
-          openLetter();
+          openLetter(foundDetail);
         }
       }
     });
@@ -691,24 +791,15 @@
       centralFlowerGroup.rotation.y = Math.sin(elapsedTime * 0.5) * 0.2;
     }
 
-    // 3. Órbita de las flores secundarias
+    // 3. Órbita en conjunto de las rosas amarillas con sus palabras románticas
     if (flowersOrbitGroup) {
-      flowersOrbitGroup.children.forEach((flower) => {
-        if (flower.userData) {
-          const currentAngle = flower.userData.baseAngle + (elapsedTime * flower.userData.speed * 0.3);
-          flower.position.x = Math.cos(currentAngle) * flower.userData.baseRadius;
-          flower.position.z = Math.sin(currentAngle) * flower.userData.baseRadius;
-          flower.position.y += Math.sin(elapsedTime * 2 + flower.userData.floatOffset) * 0.006;
-          flower.rotation.y = -currentAngle + Math.PI / 2;
-        }
-      });
-    }
-
-    // 4. Cartelas de texto flotantes (orientadas siempre a la cámara)
-    if (floatingTextsGroup) {
-      floatingTextsGroup.children.forEach((sprite) => {
-        if (sprite.userData) {
-          sprite.position.y = sprite.userData.baseY + Math.sin(elapsedTime * sprite.userData.floatSpeed) * 0.35;
+      flowersOrbitGroup.children.forEach((pair) => {
+        if (pair.userData) {
+          const currentAngle = pair.userData.baseAngle + (elapsedTime * pair.userData.speed * 0.32);
+          pair.position.x = Math.cos(currentAngle) * pair.userData.baseRadius;
+          pair.position.z = Math.sin(currentAngle) * pair.userData.baseRadius;
+          pair.position.y = pair.userData.baseY + Math.sin(elapsedTime * 1.4 + pair.userData.floatOffset) * 0.38;
+          pair.rotation.y = -currentAngle + Math.PI / 2;
         }
       });
     }

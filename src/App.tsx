@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThreeCanvas } from './components/ThreeCanvas';
 import { TopBar } from './components/TopBar';
-import { LetterModal } from './components/LetterModal';
+import { LetterModal, LetterDetail } from './components/LetterModal';
 import { DownloadModal } from './components/DownloadModal';
 import { romanticAudio } from './utils/audio';
 
@@ -17,6 +17,7 @@ export default function App() {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [cameraPreset, setCameraPreset] = useState<'center' | 'overview' | 'top' | null>(null);
   const [customName, setCustomName] = useState("");
+  const [selectedLetter, setSelectedLetter] = useState<LetterDetail | null>(null);
 
   useEffect(() => {
     romanticAudio.init((playing) => {
@@ -29,7 +30,18 @@ export default function App() {
     setIsAudioPlaying(romanticAudio.getIsPlaying());
   };
 
-  const handleOpenLetter = () => {
+  const handleOpenLetter = (detail?: LetterDetail) => {
+    if (detail) {
+      setSelectedLetter(detail);
+    } else {
+      setSelectedLetter({
+        title: "Mi amor",
+        tagline: "Septiembre de Flores Amarillas",
+        textParagraph1: "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.",
+        textParagraph2: "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.",
+        signature: "Te amo mucho."
+      });
+    }
     setIsLetterOpen(true);
     // Iniciar suavemente la música si no estaba sonando al interactuar
     if (!romanticAudio.getIsPlaying()) {
@@ -96,6 +108,7 @@ export default function App() {
         onClose={handleCloseLetter}
         customName={customName}
         onUpdateName={setCustomName}
+        letterDetail={selectedLetter}
       />
 
       {/* 5. Modal de Descarga de Código Independiente (Requisito 5) */}

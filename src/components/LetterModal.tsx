@@ -2,18 +2,28 @@ import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Copy, Check, Sparkles, Heart, X, Edit3 } from 'lucide-react';
 
+export interface LetterDetail {
+  title?: string;
+  tagline?: string;
+  textParagraph1: string;
+  textParagraph2: string;
+  signature: string;
+}
+
 interface LetterModalProps {
   isOpen: boolean;
   onClose: () => void;
   customName?: string;
   onUpdateName?: (name: string) => void;
+  letterDetail?: LetterDetail | null;
 }
 
 export const LetterModal: React.FC<LetterModalProps> = ({
   isOpen,
   onClose,
   customName = "",
-  onUpdateName
+  onUpdateName,
+  letterDetail = null
 }) => {
   const [copied, setCopied] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -49,10 +59,18 @@ export const LetterModal: React.FC<LetterModalProps> = ({
 
   if (!isOpen) return null;
 
-  const letterText = `Mi amor${customName ? ` ${customName}` : ""}:
-Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.
-Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.
-Te amo mucho.`;
+  const currentParagraph1 = letterDetail?.textParagraph1 || 
+    "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
+  const currentParagraph2 = letterDetail?.textParagraph2 || 
+    "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
+  const currentSignature = letterDetail?.signature || "Te amo mucho.";
+  const currentTagline = letterDetail?.tagline || "Septiembre de Flores Amarillas";
+  const currentGreeting = letterDetail?.title || "Mi amor";
+
+  const letterText = `${currentGreeting}${customName ? ` ${customName}` : ""}:
+${currentParagraph1}
+${currentParagraph2}
+${currentSignature}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(letterText);
@@ -111,14 +129,12 @@ Te amo mucho.`;
         {/* Encabezado de la carta */}
         <div className="text-center mt-3 mb-6">
           <div className="flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-amber-800 font-semibold mb-2">
-            <span>Septiembre</span>
-            <span>·</span>
-            <span>Flores Amarillas</span>
+            <span>{currentTagline}</span>
           </div>
 
           {isEditingName ? (
             <form onSubmit={handleSaveName} className="flex items-center justify-center gap-2 mt-2">
-              <span className="font-serif-display text-2xl font-bold text-amber-950">Mi amor,</span>
+              <span className="font-serif-display text-2xl font-bold text-amber-950">{currentGreeting},</span>
               <input
                 type="text"
                 value={nameInput}
@@ -137,7 +153,7 @@ Te amo mucho.`;
           ) : (
             <div className="flex items-center justify-center gap-2 group">
               <h2 className="font-serif-display text-3xl sm:text-4xl font-bold text-amber-950 tracking-tight">
-                Mi amor{customName ? `, ${customName}` : ""}
+                {currentGreeting}{customName ? `, ${customName}` : ""}
               </h2>
               <button
                 onClick={() => setIsEditingName(true)}
@@ -159,15 +175,15 @@ Te amo mucho.`;
 
         {/* Mensaje de la carta requerido */}
         <div className="text-center font-garamond text-xl sm:text-2xl text-amber-950 leading-relaxed space-y-4 my-6 px-2 sm:px-4">
-          <p className="font-medium">
-            Estas flores amarillas son como tú: <span className="text-amber-800 italic font-semibold">brillantes, radiantes y llenas de alegría.</span>
+          <p className="font-medium text-amber-950">
+            {currentParagraph1}
           </p>
-          <p>
-            Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.
+          <p className="text-amber-900/90 font-normal">
+            {currentParagraph2}
           </p>
           <div className="pt-2">
             <span className="font-script text-3xl sm:text-4xl font-bold text-amber-800 block text-shadow-sm">
-              Te amo mucho.
+              {currentSignature}
             </span>
           </div>
         </div>

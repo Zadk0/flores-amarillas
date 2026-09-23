@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { LetterDetail } from './LetterModal';
 
 interface ThreeCanvasProps {
-  onOpenLetter: () => void;
+  onOpenLetter: (detail?: LetterDetail) => void;
   autoRotate: boolean;
   onRaycastFlowerClick?: () => void;
   cameraPreset?: 'center' | 'overview' | 'top' | null;
@@ -382,37 +383,16 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const centralFlower = createYellowRose(1.5, true);
     centralFlower.position.set(0, 2.0, 0);
     centralFlower.rotation.x = 0.35; // Inclinación suave hacia la cámara para lucir sus pétalos
+    centralFlower.userData = {
+      letterDetail: {
+        title: "Mi amor eterno",
+        tagline: "Rosa Dorada Central",
+        textParagraph1: "En el corazón de todo este universo cósmico, esta gran flor amarilla resplandece solo por ti.",
+        textParagraph2: "Tu amor es mi centro, mi paz y la luz dorada que ilumina cada segundo de mi vida.",
+        signature: "Siempre tuyo con todo mi corazón."
+      }
+    };
     scene.add(centralFlower);
-
-    // Rosas Amarillas satélite orbitando
-    const orbitingGroup = new THREE.Group();
-    const flowerConfigs = [
-      { r: 10.5, a: 0.4, y: 1.5, s: 0.88 },
-      { r: 13.8, a: 1.6, y: -1.2, s: 0.78 },
-      { r: 11.5, a: 2.8, y: 2.4, s: 0.92 },
-      { r: 14.8, a: 3.9, y: 0.5, s: 0.84 },
-      { r: 12.2, a: 4.9, y: -2.1, s: 0.76 },
-      { r: 15.5, a: 5.8, y: 1.8, s: 0.86 }
-    ];
-
-    flowerConfigs.forEach((cfg, idx) => {
-      const fl = createYellowRose(cfg.s, false);
-      fl.position.set(
-        Math.cos(cfg.a) * cfg.r,
-        cfg.y,
-        Math.sin(cfg.a) * cfg.r
-      );
-      fl.rotation.x = 0.28 + (idx * 0.05);
-      fl.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
-      fl.userData = {
-        baseRadius: cfg.r,
-        baseAngle: cfg.a,
-        speed: 0.14 + (idx * 0.025),
-        floatOffset: idx * 1.3
-      };
-      orbitingGroup.add(fl);
-    });
-    scene.add(orbitingGroup);
 
     // 8. TEXTOS 3D FLOTANTES (Cartelas Románticas)
     function createTextSprite(text: string) {
@@ -442,7 +422,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       ctx.fillText('✦', 458, 88);
 
       // Texto
-      ctx.font = 'italic 52px "Playfair Display", Georgia, serif';
+      ctx.font = 'italic 50px "Playfair Display", Georgia, serif';
       ctx.fillStyle = '#FEF08A';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -458,32 +438,134 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         depthWrite: false
       });
       const sprite = new THREE.Sprite(mat);
-      sprite.scale.set(7.0, 2.2, 1);
+      sprite.scale.set(6.8, 2.1, 1);
       return sprite;
     }
 
-    const floatingTextsGroup = new THREE.Group();
-    const romanticPhrases = [
-      { text: "Mi amor", dist: 8.5, angle: 0.6, y: 5.0 },
-      { text: "Eres mi sol", dist: 12.0, angle: 1.8, y: -2.6 },
-      { text: "Te amo", dist: 9.0, angle: 3.2, y: 4.0 },
-      { text: "Eres preciosa", dist: 13.8, angle: 4.3, y: 1.8 },
-      { text: "Mi rosa favorita", dist: 11.2, angle: 5.4, y: -3.4 },
-      { text: "Luz de mis días", dist: 14.8, angle: 2.5, y: 5.5 }
+    // ROSAS Y PALABRAS UNIDAS EN CONJUNTO
+    // Cada elemento orbita en pareja y posee una frase y mensaje romántico único y especial
+    const orbitingGroup = new THREE.Group();
+    const celestialPairs = [
+      {
+        text: "Mi amor",
+        r: 10.5,
+        a: 0.4,
+        y: 1.5,
+        s: 0.88,
+        letter: {
+          title: "Mi gran amor",
+          tagline: "Constelación de Ternura",
+          textParagraph1: "Amarte es la aventura más dulce y hermosa que el destino pudo regalarme.",
+          textParagraph2: "Cada latido de mi corazón lleva tu nombre, y hoy celebro tu existencia con estas rosas doradas.",
+          signature: "Con todo mi amor infinito."
+        }
+      },
+      {
+        text: "Eres mi sol",
+        r: 14.0,
+        a: 1.5,
+        y: -1.2,
+        s: 0.78,
+        letter: {
+          title: "Eres mi sol",
+          tagline: "Luz Cálida y Radiante",
+          textParagraph1: "Como el sol de primavera que despierta las flores amarillas, tú iluminas hasta mis días más grises.",
+          textParagraph2: "Tu calidez me abriga el alma y tu sonrisa me devuelve la fe en todo lo bueno.",
+          signature: "Brillas en mi vida para siempre."
+        }
+      },
+      {
+        text: "Te amo",
+        r: 11.8,
+        a: 2.7,
+        y: 2.2,
+        s: 0.92,
+        letter: {
+          title: "Te amo con el alma",
+          tagline: "Promesa en Amarillo",
+          textParagraph1: "Decir 'te amo' se queda pequeño ante la inmensidad de lo que despiertas en mí.",
+          textParagraph2: "Te amo en cada silencio, en cada carcajada y en cada sueño que construimos juntos.",
+          signature: "Te amo hoy más que ayer y menos que mañana."
+        }
+      },
+      {
+        text: "Eres preciosa",
+        r: 15.2,
+        a: 3.8,
+        y: 0.5,
+        s: 0.84,
+        letter: {
+          title: "Eres preciosa",
+          tagline: "Belleza Pura y Singular",
+          textParagraph1: "No solo cautivas mis ojos con tu belleza única; cautivas mi espíritu con tu bondad y dulzura.",
+          textParagraph2: "Eres el poema más lindo que la vida jamás escribió, perfecta en cada detalle.",
+          signature: "Cautivado por tu encanto."
+        }
+      },
+      {
+        text: "Mi rosa favorita",
+        r: 12.5,
+        a: 4.8,
+        y: -2.0,
+        s: 0.78,
+        letter: {
+          title: "Mi flor favorita",
+          tagline: "Flor de Oro y Amor",
+          textParagraph1: "Entre millones de flores en este infinito jardín, mis ojos y mi corazón siempre te eligen a ti.",
+          textParagraph2: "Tu delicadeza, tu aroma y tu esencia hacen que el mundo entero florezca a tu alrededor.",
+          signature: "Para la rosa más bella de mi jardín."
+        }
+      },
+      {
+        text: "Luz de mis días",
+        r: 16.0,
+        a: 5.7,
+        y: 1.8,
+        s: 0.86,
+        letter: {
+          title: "Luz de mis días",
+          tagline: "Guía y Destello Dorado",
+          textParagraph1: "Gracias por ser ese faro de esperanza, ternura y alegría incondicional en mi camino.",
+          textParagraph2: "Tenerte a mi lado convierte lo cotidiano en un milagro dorado lleno de felicidad.",
+          signature: "Gracias por existir e iluminarme."
+        }
+      }
     ];
 
-    romanticPhrases.forEach((item, index) => {
-      const sprite = createTextSprite(item.text);
-      sprite.position.x = Math.cos(item.angle) * item.dist;
-      sprite.position.z = Math.sin(item.angle) * item.dist;
-      sprite.position.y = item.y;
-      sprite.userData = {
-        baseY: item.y,
-        floatSpeed: 1.2 + (index * 0.22)
+    celestialPairs.forEach((cfg, idx) => {
+      // Grupo contenedor para que la rosa y el texto viajen exactamente juntos
+      const pairGroup = new THREE.Group();
+
+      // Rosa amarilla 3D
+      const rose = createYellowRose(cfg.s, false);
+      rose.rotation.x = 0.28 + (idx * 0.05);
+      rose.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
+      pairGroup.add(rose);
+
+      // Cartela con la palabra romántica ubicada justo encima de la rosa
+      const textSprite = createTextSprite(cfg.text);
+      textSprite.position.set(0, 3.2 * cfg.s + 0.9, 0);
+      pairGroup.add(textSprite);
+
+      // Posición inicial en el espacio orbital
+      pairGroup.position.set(
+        Math.cos(cfg.a) * cfg.r,
+        cfg.y,
+        Math.sin(cfg.a) * cfg.r
+      );
+
+      pairGroup.userData = {
+        baseRadius: cfg.r,
+        baseAngle: cfg.a,
+        baseY: cfg.y,
+        speed: 0.12 + (idx * 0.02),
+        floatOffset: idx * 1.3,
+        letterDetail: cfg.letter
       };
-      floatingTextsGroup.add(sprite);
+
+      orbitingGroup.add(pairGroup);
     });
-    scene.add(floatingTextsGroup);
+    scene.add(orbitingGroup);
 
     // 9. PÉTALOS FLOTANTES Y CAYENDO SUAVEMENTE (Mayoría amarillo radiante con toques violetas)
     const petalsGroup = new THREE.Group();
@@ -564,17 +646,29 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       if (intersects.length > 0) {
         let obj: THREE.Object3D | null = intersects[0].object;
         let isHit = false;
+        let foundLetterDetail = undefined;
 
         while (obj && obj !== scene) {
-          if (obj === centralFlower || obj.parent === orbitingGroup || obj.parent === floatingTextsGroup) {
+          if (obj === centralFlower) {
             isHit = true;
+            foundLetterDetail = centralFlower.userData?.letterDetail;
+            break;
+          }
+          if (obj.parent === orbitingGroup) {
+            isHit = true;
+            foundLetterDetail = obj.userData?.letterDetail;
+            break;
+          }
+          if (obj.parent && obj.parent.parent === orbitingGroup) {
+            isHit = true;
+            foundLetterDetail = obj.parent.userData?.letterDetail;
             break;
           }
           obj = obj.parent;
         }
 
         if (isHit) {
-          onOpenLetter();
+          onOpenLetter(foundLetterDetail);
         }
       }
     };
@@ -604,21 +698,16 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       centralFlower.position.y = 2.2 + Math.sin(elapsed * 1.5) * 0.38;
       centralFlower.rotation.y = Math.sin(elapsed * 0.5) * 0.22;
 
-      // Flores orbitando
-      orbitingGroup.children.forEach((fl) => {
-        if (fl.userData?.baseRadius) {
-          const angle = fl.userData.baseAngle + (elapsed * fl.userData.speed * 0.32);
-          fl.position.x = Math.cos(angle) * fl.userData.baseRadius;
-          fl.position.z = Math.sin(angle) * fl.userData.baseRadius;
-          fl.position.y += Math.sin(elapsed * 2 + fl.userData.floatOffset) * 0.005;
-          fl.rotation.y = -angle + Math.PI / 2;
-        }
-      });
-
-      // Cartelas de texto flotantes
-      floatingTextsGroup.children.forEach((sprite) => {
-        if (sprite.userData?.baseY !== undefined) {
-          sprite.position.y = sprite.userData.baseY + Math.sin(elapsed * sprite.userData.floatSpeed) * 0.35;
+      // Rosas y palabras orbitando y flotando en conjunto armónico
+      orbitingGroup.children.forEach((pair) => {
+        if (pair.userData?.baseRadius) {
+          const angle = pair.userData.baseAngle + (elapsed * pair.userData.speed * 0.32);
+          pair.position.x = Math.cos(angle) * pair.userData.baseRadius;
+          pair.position.z = Math.sin(angle) * pair.userData.baseRadius;
+          // Ondulación sutil vertical compartida
+          pair.position.y = pair.userData.baseY + Math.sin(elapsed * 1.4 + pair.userData.floatOffset) * 0.38;
+          // Orientar suavemente el grupo hacia el observador de la órbita
+          pair.rotation.y = -angle + Math.PI / 2;
         }
       });
 
