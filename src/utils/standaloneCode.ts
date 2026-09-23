@@ -47,7 +47,7 @@ export const STANDALONE_INDEX_HTML = `<!DOCTYPE html>
     <!-- Botón Destacado: PARA TI -->
     <div class="action-container">
       <button id="btn-open-letter" class="btn-para-ti pulse-effect">
-        <span class="btn-flower">🌻</span>
+        <span class="btn-flower">❦</span>
         <span class="btn-text">Para Ti</span>
         <span class="btn-shine"></span>
       </button>
@@ -64,9 +64,9 @@ export const STANDALONE_INDEX_HTML = `<!DOCTYPE html>
         <div class="corner-ornament bottom-left">❦</div>
         <div class="corner-ornament bottom-right">❦</div>
 
-        <!-- Sello de cera / girasol -->
+        <!-- Sello de cera / rosa -->
         <div class="wax-seal">
-          <span class="seal-flower">🌻</span>
+          <span class="seal-flower">❦</span>
         </div>
 
         <div class="letter-header">
@@ -548,7 +548,7 @@ export const STANDALONE_SCRIPT_JS = `/**
 
   function initThree() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050402, 0.012);
+    scene.fog = new THREE.FogExp2(0x0a0514, 0.012);
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 15, 38);
@@ -557,8 +557,8 @@ export const STANDALONE_SCRIPT_JS = `/**
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    renderer.setClearColor(0x050402, 1);
+    renderer.toneMappingExposure = 1.05;
+    renderer.setClearColor(0x080410, 1);
     container.appendChild(renderer.domElement);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -575,36 +575,41 @@ export const STANDALONE_SCRIPT_JS = `/**
   }
 
   function setupLighting() {
-    const ambientLight = new THREE.AmbientLight(0xfff3d4, 0.9);
+    const ambientLight = new THREE.AmbientLight(0xfff5e6, 0.85);
     scene.add(ambientLight);
 
-    const centerLight = new THREE.PointLight(0xfbbf24, 3.5, 45, 1.2);
-    centerLight.position.set(0, 4, 0);
+    const centerLight = new THREE.PointLight(0xfcd34d, 2.2, 50, 1.2);
+    centerLight.position.set(0, 5, 0);
     scene.add(centerLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffedd5, 1.2);
+    const rimLight = new THREE.DirectionalLight(0xfef3c7, 0.9);
     rimLight.position.set(20, 30, 20);
     scene.add(rimLight);
 
-    const softFillLight = new THREE.DirectionalLight(0xd97706, 0.8);
-    softFillLight.position.set(-20, -10, -20);
-    scene.add(softFillLight);
+    const purpleAccent = new THREE.DirectionalLight(0x9333ea, 0.45);
+    purpleAccent.position.set(-20, 15, -20);
+    scene.add(purpleAccent);
+
+    const deepVioletFill = new THREE.PointLight(0x6b21a8, 1.2, 40, 1.8);
+    deepVioletFill.position.set(0, -12, 10);
+    scene.add(deepVioletFill);
   }
 
   function createGalaxy() {
-    const particleCount = 7000;
+    const particleCount = 8000;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const scales = new Float32Array(particleCount);
 
-    const colorInside = new THREE.Color(0xfffbeb);
-    const colorMid = new THREE.Color(0xfbbf24);
-    const colorArm = new THREE.Color(0xd97706);
-    const colorOutside = new THREE.Color(0x92400e);
+    const colorCenter = new THREE.Color(0xffffff);
+    const colorCore = new THREE.Color(0xffea00);
+    const colorMid = new THREE.Color(0xf59e0b);
+    const colorVioletArm = new THREE.Color(0x9333ea);
+    const colorDeepPurple = new THREE.Color(0x581c87);
 
     const arms = 3;
-    const radius = 35;
+    const radius = 38;
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
@@ -620,14 +625,16 @@ export const STANDALONE_SCRIPT_JS = `/**
       positions[i3 + 1] = randomY - 2;
       positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
 
-      const mixedColor = colorInside.clone();
+      const mixedColor = colorCore.clone();
       const t = r / radius;
-      if (t < 0.3) {
-        mixedColor.lerp(colorMid, t / 0.3);
-      } else if (t < 0.7) {
-        mixedColor.lerp(colorArm, (t - 0.3) / 0.4);
+      if (t < 0.2) {
+        mixedColor.lerp(colorCenter, (0.2 - t) / 0.2);
+      } else if (t < 0.6) {
+        mixedColor.lerp(colorMid, (t - 0.2) / 0.4);
+      } else if (t < 0.82) {
+        mixedColor.lerp(colorVioletArm, (t - 0.6) / 0.22);
       } else {
-        mixedColor.lerp(colorOutside, (t - 0.7) / 0.3);
+        mixedColor.lerp(colorDeepPurple, (t - 0.82) / 0.18);
       }
 
       colors[i3] = mixedColor.r;
@@ -666,147 +673,141 @@ export const STANDALONE_SCRIPT_JS = `/**
     scene.add(galaxyPoints);
   }
 
-  function createSingleFlower(scale = 1.0, petalCount = 20, isCentral = false) {
-    const flowerGroup = new THREE.Group();
-
-    const centerCanvas = document.createElement('canvas');
-    centerCanvas.width = 128;
-    centerCanvas.height = 128;
-    const cCtx = centerCanvas.getContext('2d');
-    const cGrad = cCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    cGrad.addColorStop(0, '#3e1e07');
-    cGrad.addColorStop(0.65, '#5c2d0c');
-    cGrad.addColorStop(0.9, '#a16207');
-    cGrad.addColorStop(1, '#eab308');
-    cCtx.fillStyle = cGrad;
-    cCtx.fillRect(0, 0, 128, 128);
-
-    cCtx.fillStyle = 'rgba(253, 224, 71, 0.6)';
-    for (let s = 0; s < 180; s++) {
-      const angle = s * 137.5 * (Math.PI / 180);
-      const dist = Math.sqrt(s) * 4.2;
-      const x = 64 + Math.cos(angle) * dist;
-      const y = 64 + Math.sin(angle) * dist;
-      cCtx.beginPath();
-      cCtx.arc(x, y, 1.2, 0, Math.PI * 2);
-      cCtx.fill();
+  function createRosePetalGeometry(width, height, curl) {
+    const geo = new THREE.PlaneGeometry(width, height, 10, 10);
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const u = pos.getX(i) / (width * 0.5);
+      const v = (pos.getY(i) + height * 0.5) / height;
+      const taper = 0.25 + 0.75 * Math.sin(v * Math.PI * 0.85);
+      pos.setX(i, pos.getX(i) * taper);
+      const cup = (1 - u * u) * Math.sin(v * Math.PI) * (width * 0.32);
+      const roll = Math.pow(Math.max(0, v - 0.55) / 0.45, 2) * curl;
+      pos.setZ(i, cup - roll);
     }
-    const centerTexture = new THREE.CanvasTexture(centerCanvas);
+    geo.computeVertexNormals();
+    return geo;
+  }
 
-    const centerGeo = new THREE.CylinderGeometry(1.2 * scale, 1.0 * scale, 0.4 * scale, 32);
-    const centerMat = new THREE.MeshStandardMaterial({
-      map: centerTexture,
-      roughness: 0.8,
-      metalness: 0.1
-    });
-    const centerMesh = new THREE.Mesh(centerGeo, centerMat);
-    flowerGroup.add(centerMesh);
+  function createYellowRose(scale = 1.0, isCentral = false) {
+    const roseGroup = new THREE.Group();
 
-    function makePetalGeometry(length, width) {
-      const shape = new THREE.Shape();
-      shape.moveTo(0, 0);
-      shape.quadraticCurveTo(width * 0.7, length * 0.4, width * 0.5, length * 0.85);
-      shape.quadraticCurveTo(0, length * 1.05, -width * 0.5, length * 0.85);
-      shape.quadraticCurveTo(-width * 0.7, length * 0.4, 0, 0);
-
-      const geo = new THREE.ExtrudeGeometry(shape, {
-        depth: 0.08 * scale,
-        bevelEnabled: true,
-        bevelSegments: 2,
-        steps: 1,
-        bevelSize: 0.04 * scale,
-        bevelThickness: 0.04 * scale
-      });
-      geo.center();
-      return geo;
-    }
-
-    const petalMatPrimary = new THREE.MeshStandardMaterial({
+    const roseOuterMat = new THREE.MeshStandardMaterial({
       color: 0xfacc15,
-      roughness: 0.35,
-      metalness: 0.05,
-      emissive: 0xca8a04,
-      emissiveIntensity: 0.25,
+      roughness: 0.62,
+      metalness: 0.02,
+      emissive: 0x854d0e,
+      emissiveIntensity: 0.08,
       side: THREE.DoubleSide
     });
-
-    const petalMatSecondary = new THREE.MeshStandardMaterial({
+    const roseInnerMat = new THREE.MeshStandardMaterial({
       color: 0xfde047,
-      roughness: 0.4,
-      metalness: 0.05,
-      emissive: 0xeab308,
-      emissiveIntensity: 0.3,
+      roughness: 0.58,
+      metalness: 0.02,
+      emissive: 0xa16207,
+      emissiveIntensity: 0.1,
       side: THREE.DoubleSide
     });
+    const roseCoreMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      roughness: 0.55,
+      metalness: 0.02,
+      emissive: 0xca8a04,
+      emissiveIntensity: 0.12,
+      side: THREE.DoubleSide
+    });
+    const sepalMat = new THREE.MeshStandardMaterial({
+      color: 0x3f6212,
+      roughness: 0.75,
+      metalness: 0.05
+    });
 
-    const petalGeo1 = makePetalGeometry(2.4 * scale, 0.75 * scale);
-    const petalGeo2 = makePetalGeometry(2.0 * scale, 0.65 * scale);
-
-    for (let p = 0; p < petalCount; p++) {
-      const angle = (p / petalCount) * Math.PI * 2;
-      const petal = new THREE.Mesh(petalGeo1, petalMatPrimary);
-      petal.position.x = Math.cos(angle) * (1.1 * scale);
-      petal.position.z = Math.sin(angle) * (1.1 * scale);
-      petal.position.y = 0.05 * scale;
-      petal.rotation.y = -angle + Math.PI / 2;
-      petal.rotation.x = 0.15;
-      flowerGroup.add(petal);
+    const coreGeo = createRosePetalGeometry(0.7 * scale, 1.1 * scale, 0.15 * scale);
+    for (let i = 0; i < 4; i++) {
+      const angle = (i / 4) * Math.PI * 2;
+      const mesh = new THREE.Mesh(coreGeo, roseCoreMat);
+      mesh.position.set(Math.cos(angle) * 0.14 * scale, 0.5 * scale, Math.sin(angle) * 0.14 * scale);
+      mesh.rotation.y = -angle + Math.PI / 2 + 0.3;
+      mesh.rotation.x = 0.28;
+      roseGroup.add(mesh);
     }
 
-    for (let p = 0; p < petalCount; p++) {
-      const angle = ((p + 0.5) / petalCount) * Math.PI * 2;
-      const petal = new THREE.Mesh(petalGeo2, petalMatSecondary);
-      petal.position.x = Math.cos(angle) * (0.85 * scale);
-      petal.position.z = Math.sin(angle) * (0.85 * scale);
-      petal.position.y = 0.15 * scale;
-      petal.rotation.y = -angle + Math.PI / 2;
-      petal.rotation.x = 0.25;
-      flowerGroup.add(petal);
+    const midGeo1 = createRosePetalGeometry(1.2 * scale, 1.5 * scale, 0.35 * scale);
+    for (let i = 0; i < 5; i++) {
+      const angle = (i / 5) * Math.PI * 2 + 0.35;
+      const mesh = new THREE.Mesh(midGeo1, roseInnerMat);
+      mesh.position.set(Math.cos(angle) * 0.42 * scale, 0.38 * scale, Math.sin(angle) * 0.42 * scale);
+      mesh.rotation.y = -angle + Math.PI / 2;
+      mesh.rotation.x = 0.48;
+      roseGroup.add(mesh);
     }
+
+    const midGeo2 = createRosePetalGeometry(1.6 * scale, 1.8 * scale, 0.55 * scale);
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI * 2 + 0.6;
+      const mesh = new THREE.Mesh(midGeo2, roseOuterMat);
+      mesh.position.set(Math.cos(angle) * 0.85 * scale, 0.22 * scale, Math.sin(angle) * 0.85 * scale);
+      mesh.rotation.y = -angle + Math.PI / 2;
+      mesh.rotation.x = 0.72;
+      roseGroup.add(mesh);
+    }
+
+    const outerGeo = createRosePetalGeometry(2.1 * scale, 2.2 * scale, 0.85 * scale);
+    for (let i = 0; i < 7; i++) {
+      const angle = (i / 7) * Math.PI * 2 + 0.15;
+      const mesh = new THREE.Mesh(outerGeo, roseOuterMat);
+      mesh.position.set(Math.cos(angle) * 1.35 * scale, 0.05 * scale, Math.sin(angle) * 1.35 * scale);
+      mesh.rotation.y = -angle + Math.PI / 2;
+      mesh.rotation.x = 0.95;
+      roseGroup.add(mesh);
+    }
+
+    const calyxGeo = new THREE.ConeGeometry(0.75 * scale, 0.9 * scale, 16);
+    const calyxMesh = new THREE.Mesh(calyxGeo, sepalMat);
+    calyxMesh.rotation.x = Math.PI;
+    calyxMesh.position.y = -0.45 * scale;
+    roseGroup.add(calyxMesh);
 
     const stemCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, -0.2 * scale, 0),
-      new THREE.Vector3(0.2 * scale, -2.5 * scale, 0.2 * scale),
-      new THREE.Vector3(-0.3 * scale, -5.5 * scale, 0),
-      new THREE.Vector3(0, -8.0 * scale, 0.1 * scale)
+      new THREE.Vector3(0, -0.4 * scale, 0),
+      new THREE.Vector3(0.12 * scale, -2.4 * scale, 0.15 * scale),
+      new THREE.Vector3(-0.18 * scale, -5.2 * scale, -0.1 * scale),
+      new THREE.Vector3(0.05 * scale, -7.5 * scale, 0.2 * scale)
     ]);
-    const stemGeo = new THREE.TubeGeometry(stemCurve, 20, 0.16 * scale, 8, false);
-    const stemMat = new THREE.MeshStandardMaterial({
-      color: 0x4d7c0f,
-      roughness: 0.6,
-      metalness: 0.1
-    });
-    const stemMesh = new THREE.Mesh(stemGeo, stemMat);
-    flowerGroup.add(stemMesh);
+    const stemGeo = new THREE.TubeGeometry(stemCurve, 16, 0.14 * scale, 8, false);
+    const stemMesh = new THREE.Mesh(stemGeo, sepalMat);
+    roseGroup.add(stemMesh);
 
     if (isCentral) {
       const auraCanvas = document.createElement('canvas');
-      auraCanvas.width = 64;
-      auraCanvas.height = 64;
+      auraCanvas.width = 128;
+      auraCanvas.height = 128;
       const aCtx = auraCanvas.getContext('2d');
-      const aGrad = aCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      aGrad.addColorStop(0, 'rgba(253, 224, 71, 0.9)');
-      aGrad.addColorStop(0.5, 'rgba(245, 158, 11, 0.4)');
+      const aGrad = aCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      aGrad.addColorStop(0, 'rgba(254, 240, 138, 0.35)');
+      aGrad.addColorStop(0.4, 'rgba(245, 158, 11, 0.18)');
+      aGrad.addColorStop(0.75, 'rgba(147, 51, 234, 0.08)');
       aGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       aCtx.fillStyle = aGrad;
-      aCtx.fillRect(0, 0, 64, 64);
+      aCtx.fillRect(0, 0, 128, 128);
       const auraTex = new THREE.CanvasTexture(auraCanvas);
       const auraMat = new THREE.SpriteMaterial({
         map: auraTex,
         blending: THREE.AdditiveBlending,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.45
       });
       const auraSprite = new THREE.Sprite(auraMat);
-      auraSprite.scale.set(12 * scale, 12 * scale, 1);
-      flowerGroup.add(auraSprite);
+      auraSprite.scale.set(11 * scale, 11 * scale, 1);
+      auraSprite.position.set(0, 0.5 * scale, 0);
+      roseGroup.add(auraSprite);
     }
 
-    return flowerGroup;
+    return roseGroup;
   }
 
   function createFlowers() {
-    centralFlowerGroup = createSingleFlower(1.8, 26, true);
+    centralFlowerGroup = createYellowRose(1.5, true);
     centralFlowerGroup.position.set(0, 2, 0);
     centralFlowerGroup.rotation.x = 0.35;
     scene.add(centralFlowerGroup);
@@ -816,22 +817,23 @@ export const STANDALONE_SCRIPT_JS = `/**
 
     flowersOrbitGroup = new THREE.Group();
     const flowerPositions = [
-      { radius: 10, angle: 0.4, y: 1.5, scale: 0.95 },
-      { radius: 13, angle: 1.6, y: -1.0, scale: 0.85 },
-      { radius: 11, angle: 2.8, y: 2.2, scale: 1.0 },
-      { radius: 14, angle: 3.9, y: 0.5, scale: 0.9 },
-      { radius: 12, angle: 4.9, y: -2.0, scale: 0.8 },
-      { radius: 15, angle: 5.8, y: 1.8, scale: 0.92 }
+      { radius: 10.5, angle: 0.4, y: 1.5, scale: 0.88 },
+      { radius: 13.8, angle: 1.6, y: -1.2, scale: 0.78 },
+      { radius: 11.5, angle: 2.8, y: 2.4, scale: 0.92 },
+      { radius: 14.8, angle: 3.9, y: 0.5, scale: 0.84 },
+      { radius: 12.2, angle: 4.9, y: -2.1, scale: 0.76 },
+      { radius: 15.5, angle: 5.8, y: 1.8, scale: 0.86 }
     ];
 
     flowerPositions.forEach((pos, idx) => {
-      const flower = createSingleFlower(pos.scale, 20, false);
-      flower.position.x = Math.cos(pos.angle) * pos.radius;
-      flower.position.z = Math.sin(pos.angle) * pos.radius;
-      flower.position.y = pos.y;
-      flower.rotation.x = Math.random() * 0.4;
-      flower.rotation.y = Math.random() * Math.PI * 2;
-      flower.rotation.z = (Math.random() - 0.5) * 0.4;
+      const flower = createYellowRose(pos.scale, false);
+      flower.position.set(
+        Math.cos(pos.angle) * pos.radius,
+        pos.y,
+        Math.sin(pos.angle) * pos.radius
+      );
+      flower.rotation.x = 0.28 + (idx * 0.05);
+      flower.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
       flower.userData = {
         baseRadius: pos.radius,
         baseAngle: pos.angle,
@@ -897,7 +899,7 @@ export const STANDALONE_SCRIPT_JS = `/**
       { text: "Eres mi sol", dist: 12.0, angle: 1.8, y: -2.5 },
       { text: "Te amo", dist: 9.0, angle: 3.2, y: 3.8 },
       { text: "Eres preciosa", dist: 13.5, angle: 4.3, y: 1.5 },
-      { text: "Mi flor favorita", dist: 11.0, angle: 5.4, y: -3.2 },
+      { text: "Mi rosa favorita", dist: 11.0, angle: 5.4, y: -3.2 },
       { text: "Luz de mis días", dist: 14.5, angle: 2.5, y: 5.2 }
     ];
 
@@ -931,9 +933,10 @@ export const STANDALONE_SCRIPT_JS = `/**
     const petalGeo = new THREE.ShapeGeometry(petalShape);
     const petalMat = new THREE.MeshStandardMaterial({
       color: 0xfacc15,
-      roughness: 0.4,
-      emissive: 0xd97706,
-      emissiveIntensity: 0.35,
+      roughness: 0.55,
+      metalness: 0.02,
+      emissive: 0x92400e,
+      emissiveIntensity: 0.12,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.9

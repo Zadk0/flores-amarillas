@@ -75,10 +75,10 @@ export default function App() {
         <div className="pointer-events-auto">
           <button
             onClick={handleOpenLetter}
-            className="group relative inline-flex items-center gap-3.5 px-8 sm:px-12 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-neutral-950 font-serif-display text-base sm:text-lg font-bold tracking-wide border-2 border-amber-200 shadow-[0_0_35px_rgba(245,158,11,0.65)] hover:shadow-[0_0_55px_rgba(245,158,11,0.9)] transition-all duration-300 transform hover:scale-105 active:scale-95 animate-pulse-gold cursor-pointer"
+            className="group relative inline-flex items-center gap-3.5 px-8 sm:px-12 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-neutral-950 font-serif-display text-base sm:text-lg font-bold tracking-wide border-2 border-amber-200 shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:shadow-[0_0_45px_rgba(245,158,11,0.75)] transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
           >
-            <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
-              🌻
+            <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 font-serif">
+              ❦
             </span>
             <span className="drop-shadow-sm font-semibold tracking-wider">
               Para Ti

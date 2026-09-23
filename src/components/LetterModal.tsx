@@ -19,15 +19,15 @@ export const LetterModal: React.FC<LetterModalProps> = ({
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(customName);
 
-  // Efecto de lluvia dorada al abrirse la carta
+  // Efecto de lluvia dorada con destellos morados al abrirse la carta (amarillo preponderante)
   useEffect(() => {
     if (isOpen) {
       try {
         confetti({
-          particleCount: 65,
-          spread: 80,
+          particleCount: 75,
+          spread: 85,
           origin: { y: 0.6 },
-          colors: ['#FBBF24', '#F59E0B', '#FFFBEB', '#D97706', '#FEF08A'],
+          colors: ['#FBBF24', '#F59E0B', '#FFFBEB', '#FEF08A', '#EAB308', '#C084FC', '#9333EA'],
           shapes: ['circle']
         });
       } catch (err) {
@@ -96,7 +96,7 @@ Te amo mucho.`;
         <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 via-amber-600 to-amber-800 border-2 border-amber-200 flex items-center justify-center shadow-lg shadow-amber-900/40 cursor-pointer hover:scale-105 transition-transform"
              onClick={handleTriggerSparkles}
              title="Toca para destellos de amor">
-          <span className="text-2xl filter drop-shadow">🌻</span>
+          <span className="text-amber-100 text-2xl font-serif">❦</span>
         </div>
 
         {/* Botón de cerrar superior */}

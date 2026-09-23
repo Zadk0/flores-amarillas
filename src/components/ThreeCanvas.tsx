@@ -24,9 +24,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     if (!containerRef.current) return;
     const container = containerRef.current;
 
-    // 1. ESCENA & NIEBLA
+    // 1. ESCENA & NIEBLA CÓSMICA (Fondo con matiz violeta profundo místico)
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x060402, 0.012);
+    scene.fog = new THREE.FogExp2(0x0a0514, 0.012);
 
     // 2. CÁMARA
     const camera = new THREE.PerspectiveCamera(
@@ -47,8 +47,8 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
-    renderer.setClearColor(0x060402, 1);
+    renderer.toneMappingExposure = 1.05;
+    renderer.setClearColor(0x080410, 1);
     container.appendChild(renderer.domElement);
 
     // 4. CONTROLES DE ÓRBITA
@@ -62,35 +62,45 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     controls.autoRotateSpeed = 0.6;
     controlsRef.current = controls;
 
-    // 5. ILUMINACIÓN ROMÁNTICA
-    const ambientLight = new THREE.AmbientLight(0xfff5db, 0.95);
+    // 5. ILUMINACIÓN ROMÁNTICA: CÁLIDA, SUAVE Y EQUILIBRADA (SIN BRILLO EXCESIVO)
+    const ambientLight = new THREE.AmbientLight(0xfff5e6, 0.85);
     scene.add(ambientLight);
 
-    const centerPointLight = new THREE.PointLight(0xfbbf24, 3.8, 50, 1.2);
-    centerPointLight.position.set(0, 4, 0);
+    // Luz cálida central moderada y natural para las rosas
+    const centerPointLight = new THREE.PointLight(0xfcd34d, 2.2, 50, 1.2);
+    centerPointLight.position.set(0, 5, 0);
     scene.add(centerPointLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffedd5, 1.3);
-    rimLight.position.set(25, 35, 20);
-    scene.add(rimLight);
+    // Luz lateral suave
+    const goldRimLight = new THREE.DirectionalLight(0xfef3c7, 0.9);
+    goldRimLight.position.set(25, 30, 20);
+    scene.add(goldRimLight);
 
-    const goldSoftLight = new THREE.DirectionalLight(0xd97706, 0.85);
-    goldSoftLight.position.set(-25, -15, -20);
-    scene.add(goldSoftLight);
+    // Luz de contraste morado suave para dar profundidad
+    const purpleAccentLight = new THREE.DirectionalLight(0x9333ea, 0.45);
+    purpleAccentLight.position.set(-25, 15, -25);
+    scene.add(purpleAccentLight);
 
-    // 6. GALAXIA ESPIRAL DORADA (Polvo Estelar)
-    const particleCount = 7500;
+    const deepVioletFill = new THREE.PointLight(0x6b21a8, 1.2, 40, 1.8);
+    deepVioletFill.position.set(0, -12, 10);
+    scene.add(deepVioletFill);
+
+    // 6. GALAXIA ESPIRAL DORADA CON POLVO CÓSMICO MORADO/VIOLETA
+    const particleCount = 8500;
     const galaxyGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
-    const colorInside = new THREE.Color(0xfffdf0);
-    const colorMid = new THREE.Color(0xfbbf24);
-    const colorArm = new THREE.Color(0xd97706);
-    const colorOutside = new THREE.Color(0x92400e);
+    // Colores: El núcleo e interior son AMARILLO VIBRANTE Y ORO
+    // Los bordes exteriores tienen un halo morado/púrpura elegante que hace resaltar el amarillo
+    const colorCenter = new THREE.Color(0xffffff); // Blanco incandescente
+    const colorCore = new THREE.Color(0xffea00);   // Amarillo intenso radiante
+    const colorMid = new THREE.Color(0xf59e0b);    // Ámbar dorado
+    const colorVioletArm = new THREE.Color(0x9333ea); // Violeta místico
+    const colorDeepPurple = new THREE.Color(0x581c87); // Púrpura cósmico profundo
 
     const arms = 3;
-    const maxRadius = 38;
+    const maxRadius = 40;
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
@@ -106,14 +116,17 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       positions[i3 + 1] = randomY - 2;
       positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
 
-      const mixedColor = colorInside.clone();
+      // Color: El 70% del volumen es intensamente AMARILLO/DORADO; las estrellas lejanas toman matices púrpura
+      const mixedColor = colorCore.clone();
       const t = r / maxRadius;
-      if (t < 0.28) {
-        mixedColor.lerp(colorMid, t / 0.28);
-      } else if (t < 0.68) {
-        mixedColor.lerp(colorArm, (t - 0.28) / 0.4);
+      if (t < 0.2) {
+        mixedColor.lerp(colorCenter, (0.2 - t) / 0.2); // Núcleo
+      } else if (t < 0.6) {
+        mixedColor.lerp(colorMid, (t - 0.2) / 0.4); // Amarillo / dorado cálido
+      } else if (t < 0.82) {
+        mixedColor.lerp(colorVioletArm, (t - 0.6) / 0.22);
       } else {
-        mixedColor.lerp(colorOutside, (t - 0.68) / 0.32);
+        mixedColor.lerp(colorDeepPurple, (t - 0.82) / 0.18);
       }
 
       colors[i3] = mixedColor.r;
@@ -130,16 +143,16 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     starCanvas.height = 64;
     const sCtx = starCanvas.getContext('2d')!;
     const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    sGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    sGrad.addColorStop(0.25, 'rgba(254, 240, 138, 0.9)');
-    sGrad.addColorStop(0.65, 'rgba(245, 158, 11, 0.3)');
+    sGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+    sGrad.addColorStop(0.3, 'rgba(254, 240, 138, 0.65)');
+    sGrad.addColorStop(0.7, 'rgba(245, 158, 11, 0.2)');
     sGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     sCtx.fillStyle = sGrad;
     sCtx.fillRect(0, 0, 64, 64);
     const starTexture = new THREE.CanvasTexture(starCanvas);
 
     const galaxyMat = new THREE.PointsMaterial({
-      size: 0.52,
+      size: 0.46,
       map: starTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -151,183 +164,246 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const galaxyPoints = new THREE.Points(galaxyGeo, galaxyMat);
     scene.add(galaxyPoints);
 
-    // 7. CONSTRUCTOR PROCEDURAL DE FLORES AMARILLAS 3D
-    function createFlower(scale = 1.0, petalCount = 22, isCentral = false) {
-      const flowerGroup = new THREE.Group();
+    // 7. MODELADO 3D PROCEDURAL DE ROSAS AMARILLAS ELEGANTES (NO BRILLAN EN EXCESO)
+    // Pétalos modelados con superficies curvadas concéntricas envolventes (estilo rosa abierta)
+    function createRosePetalGeometry(width: number, height: number, curl: number) {
+      const segW = 12;
+      const segH = 12;
+      const geo = new THREE.PlaneGeometry(width, height, segW, segH);
+      const pos = geo.attributes.position;
 
-      // Disco central con textura de semillas
-      const discCanvas = document.createElement('canvas');
-      discCanvas.width = 128;
-      discCanvas.height = 128;
-      const dCtx = discCanvas.getContext('2d')!;
-      const dGrad = dCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      dGrad.addColorStop(0, '#3f1f06');
-      dGrad.addColorStop(0.7, '#6b360a');
-      dGrad.addColorStop(0.9, '#a16207');
-      dGrad.addColorStop(1, '#eab308');
-      dCtx.fillStyle = dGrad;
-      dCtx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < pos.count; i++) {
+        const u = pos.getX(i) / (width * 0.5); // -1 a 1
+        const v = (pos.getY(i) + height * 0.5) / height; // 0 (base) a 1 (punta)
 
-      dCtx.fillStyle = 'rgba(254, 240, 138, 0.65)';
-      for (let s = 0; s < 190; s++) {
-        const phi = s * 137.5 * (Math.PI / 180);
-        const radiusDist = Math.sqrt(s) * 4.3;
-        const sx = 64 + Math.cos(phi) * radiusDist;
-        const sy = 64 + Math.sin(phi) * radiusDist;
-        dCtx.beginPath();
-        dCtx.arc(sx, sy, 1.25, 0, Math.PI * 2);
-        dCtx.fill();
-      }
-      const discTex = new THREE.CanvasTexture(discCanvas);
+        // Estrechar la base del pétalo, ensanchar el centro
+        const taper = 0.25 + 0.75 * Math.sin(v * Math.PI * 0.85);
+        pos.setX(i, pos.getX(i) * taper);
 
-      const discGeo = new THREE.CylinderGeometry(1.2 * scale, 1.0 * scale, 0.4 * scale, 32);
-      const discMat = new THREE.MeshStandardMaterial({
-        map: discTex,
-        roughness: 0.85,
-        metalness: 0.08
-      });
-      const discMesh = new THREE.Mesh(discGeo, discMat);
-      flowerGroup.add(discMesh);
+        // Curvatura esférica/cóncava envolvente
+        const cup = (1 - u * u) * Math.sin(v * Math.PI) * (width * 0.32);
+        // Curvatura del borde superior doblándose hacia afuera (efecto rosa natural)
+        const roll = Math.pow(Math.max(0, v - 0.55) / 0.45, 2) * curl;
 
-      // Forma de pétalo curvo
-      const shape = new THREE.Shape();
-      const length = 2.4 * scale;
-      const width = 0.72 * scale;
-      shape.moveTo(0, 0);
-      shape.quadraticCurveTo(width * 0.75, length * 0.4, width * 0.5, length * 0.85);
-      shape.quadraticCurveTo(0, length * 1.05, -width * 0.5, length * 0.85);
-      shape.quadraticCurveTo(-width * 0.75, length * 0.4, 0, 0);
-
-      const extrudeSettings = {
-        depth: 0.08 * scale,
-        bevelEnabled: true,
-        bevelSegments: 2,
-        steps: 1,
-        bevelSize: 0.04 * scale,
-        bevelThickness: 0.04 * scale
-      };
-      const petalGeoOuter = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      petalGeoOuter.center();
-
-      const innerShape = new THREE.Shape();
-      const iLen = 1.95 * scale;
-      const iWid = 0.62 * scale;
-      innerShape.moveTo(0, 0);
-      innerShape.quadraticCurveTo(iWid * 0.75, iLen * 0.4, iWid * 0.5, iLen * 0.85);
-      innerShape.quadraticCurveTo(0, iLen * 1.05, -iWid * 0.5, iLen * 0.85);
-      innerShape.quadraticCurveTo(-iWid * 0.75, iLen * 0.4, 0, 0);
-      const petalGeoInner = new THREE.ExtrudeGeometry(innerShape, extrudeSettings);
-      petalGeoInner.center();
-
-      const petalMatOuter = new THREE.MeshStandardMaterial({
-        color: 0xfacc15,
-        roughness: 0.35,
-        metalness: 0.05,
-        emissive: 0xca8a04,
-        emissiveIntensity: 0.28,
-        side: THREE.DoubleSide
-      });
-
-      const petalMatInner = new THREE.MeshStandardMaterial({
-        color: 0xfde047,
-        roughness: 0.38,
-        metalness: 0.05,
-        emissive: 0xeab308,
-        emissiveIntensity: 0.32,
-        side: THREE.DoubleSide
-      });
-
-      // Fila exterior de pétalos
-      for (let p = 0; p < petalCount; p++) {
-        const angle = (p / petalCount) * Math.PI * 2;
-        const petal = new THREE.Mesh(petalGeoOuter, petalMatOuter);
-        petal.position.x = Math.cos(angle) * (1.1 * scale);
-        petal.position.z = Math.sin(angle) * (1.1 * scale);
-        petal.position.y = 0.06 * scale;
-        petal.rotation.y = -angle + Math.PI / 2;
-        petal.rotation.x = 0.16;
-        flowerGroup.add(petal);
+        pos.setZ(i, cup - roll);
       }
 
-      // Fila interior
-      for (let p = 0; p < petalCount; p++) {
-        const angle = ((p + 0.5) / petalCount) * Math.PI * 2;
-        const petal = new THREE.Mesh(petalGeoInner, petalMatInner);
-        petal.position.x = Math.cos(angle) * (0.86 * scale);
-        petal.position.z = Math.sin(angle) * (0.86 * scale);
-        petal.position.y = 0.16 * scale;
-        petal.rotation.y = -angle + Math.PI / 2;
-        petal.rotation.x = 0.28;
-        flowerGroup.add(petal);
+      geo.computeVertexNormals();
+      return geo;
+    }
+
+    // Material aterciopelado para los pétalos de rosa (amarillo cálido, mate suave y sin brillos excesivos)
+    const rosePetalOuterMat = new THREE.MeshStandardMaterial({
+      color: 0xfacc15,
+      roughness: 0.62,
+      metalness: 0.02,
+      emissive: 0x854d0e,
+      emissiveIntensity: 0.08,
+      side: THREE.DoubleSide
+    });
+
+    const rosePetalInnerMat = new THREE.MeshStandardMaterial({
+      color: 0xfde047,
+      roughness: 0.58,
+      metalness: 0.02,
+      emissive: 0xa16207,
+      emissiveIntensity: 0.1,
+      side: THREE.DoubleSide
+    });
+
+    const roseCoreMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      roughness: 0.55,
+      metalness: 0.02,
+      emissive: 0xca8a04,
+      emissiveIntensity: 0.12,
+      side: THREE.DoubleSide
+    });
+
+    const sepalMat = new THREE.MeshStandardMaterial({
+      color: 0x3f6212,
+      roughness: 0.75,
+      metalness: 0.05
+    });
+
+    function createYellowRose(scale = 1.0, isCentral = false) {
+      const roseGroup = new THREE.Group();
+
+      // Botón central apretado (espiral espiral de 3 pétalos internos)
+      const corePetalGeo = createRosePetalGeometry(0.7 * scale, 1.1 * scale, 0.15 * scale);
+      for (let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2;
+        const mesh = new THREE.Mesh(corePetalGeo, roseCoreMat);
+        mesh.position.set(
+          Math.cos(angle) * 0.14 * scale,
+          0.5 * scale,
+          Math.sin(angle) * 0.14 * scale
+        );
+        mesh.rotation.y = -angle + Math.PI / 2 + 0.3;
+        mesh.rotation.x = 0.28;
+        mesh.rotation.z = 0.08;
+        roseGroup.add(mesh);
       }
 
-      // Tallo suavemente curvado
+      // Capa media 1 (5 pétalos intermedios)
+      const midPetalGeo1 = createRosePetalGeometry(1.2 * scale, 1.5 * scale, 0.35 * scale);
+      for (let i = 0; i < 5; i++) {
+        const angle = (i / 5) * Math.PI * 2 + 0.35;
+        const mesh = new THREE.Mesh(midPetalGeo1, rosePetalInnerMat);
+        mesh.position.set(
+          Math.cos(angle) * 0.42 * scale,
+          0.38 * scale,
+          Math.sin(angle) * 0.42 * scale
+        );
+        mesh.rotation.y = -angle + Math.PI / 2;
+        mesh.rotation.x = 0.48;
+        roseGroup.add(mesh);
+      }
+
+      // Capa media 2 (6 pétalos más abiertos)
+      const midPetalGeo2 = createRosePetalGeometry(1.6 * scale, 1.8 * scale, 0.55 * scale);
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2 + 0.6;
+        const mesh = new THREE.Mesh(midPetalGeo2, rosePetalOuterMat);
+        mesh.position.set(
+          Math.cos(angle) * 0.85 * scale,
+          0.22 * scale,
+          Math.sin(angle) * 0.85 * scale
+        );
+        mesh.rotation.y = -angle + Math.PI / 2;
+        mesh.rotation.x = 0.72;
+        roseGroup.add(mesh);
+      }
+
+      // Capa exterior grande (7 pétalos amplios desplegados y ondulados)
+      const outerPetalGeo = createRosePetalGeometry(2.1 * scale, 2.2 * scale, 0.85 * scale);
+      for (let i = 0; i < 7; i++) {
+        const angle = (i / 7) * Math.PI * 2 + 0.15;
+        const mesh = new THREE.Mesh(outerPetalGeo, rosePetalOuterMat);
+        mesh.position.set(
+          Math.cos(angle) * 1.35 * scale,
+          0.05 * scale,
+          Math.sin(angle) * 1.35 * scale
+        );
+        mesh.rotation.y = -angle + Math.PI / 2;
+        mesh.rotation.x = 0.95;
+        roseGroup.add(mesh);
+      }
+
+      // Receptáculo verde y sépalos puntiagudos debajo de la rosa
+      const calyxGeo = new THREE.ConeGeometry(0.75 * scale, 0.9 * scale, 16);
+      const calyxMesh = new THREE.Mesh(calyxGeo, sepalMat);
+      calyxMesh.rotation.x = Math.PI;
+      calyxMesh.position.y = -0.45 * scale;
+      roseGroup.add(calyxMesh);
+
+      // 5 sépalos verdes curvados
+      const sepalShape = new THREE.Shape();
+      sepalShape.moveTo(0, 0);
+      sepalShape.lineTo(0.22 * scale, -0.2 * scale);
+      sepalShape.lineTo(0.08 * scale, -1.25 * scale);
+      sepalShape.lineTo(0, -1.4 * scale);
+      sepalShape.lineTo(-0.08 * scale, -1.25 * scale);
+      sepalShape.lineTo(-0.22 * scale, -0.2 * scale);
+      sepalShape.closePath();
+      const sepalGeo = new THREE.ShapeGeometry(sepalShape);
+
+      for (let s = 0; s < 5; s++) {
+        const angle = (s / 5) * Math.PI * 2;
+        const sepal = new THREE.Mesh(sepalGeo, sepalMat);
+        sepal.position.set(
+          Math.cos(angle) * 0.45 * scale,
+          -0.15 * scale,
+          Math.sin(angle) * 0.45 * scale
+        );
+        sepal.rotation.y = -angle + Math.PI / 2;
+        sepal.rotation.x = 0.85;
+        roseGroup.add(sepal);
+      }
+
+      // Tallo verde y suavemente curvado
       const stemCurve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0, -0.2 * scale, 0),
-        new THREE.Vector3(0.18 * scale, -2.5 * scale, 0.2 * scale),
-        new THREE.Vector3(-0.25 * scale, -5.5 * scale, 0),
-        new THREE.Vector3(0, -8.0 * scale, 0.15 * scale)
+        new THREE.Vector3(0, -0.4 * scale, 0),
+        new THREE.Vector3(0.12 * scale, -2.4 * scale, 0.15 * scale),
+        new THREE.Vector3(-0.18 * scale, -5.2 * scale, -0.1 * scale),
+        new THREE.Vector3(0.05 * scale, -7.5 * scale, 0.2 * scale)
       ]);
-      const stemGeo = new THREE.TubeGeometry(stemCurve, 20, 0.15 * scale, 8, false);
-      const stemMat = new THREE.MeshStandardMaterial({
-        color: 0x4d7c0f,
-        roughness: 0.65,
-        metalness: 0.1
-      });
-      const stemMesh = new THREE.Mesh(stemGeo, stemMat);
-      flowerGroup.add(stemMesh);
+      const stemGeo = new THREE.TubeGeometry(stemCurve, 18, 0.14 * scale, 8, false);
+      const stemMesh = new THREE.Mesh(stemGeo, sepalMat);
+      roseGroup.add(stemMesh);
 
-      // Resplandor áurico si es la flor central
+      // Pequeñas hojas en el tallo
+      const leafShape = new THREE.Shape();
+      leafShape.moveTo(0, 0);
+      leafShape.quadraticCurveTo(0.45 * scale, 0.5 * scale, 0.1 * scale, 1.2 * scale);
+      leafShape.quadraticCurveTo(-0.45 * scale, 0.5 * scale, 0, 0);
+      const leafGeo = new THREE.ShapeGeometry(leafShape);
+
+      const leaf1 = new THREE.Mesh(leafGeo, sepalMat);
+      leaf1.position.set(0.12 * scale, -2.6 * scale, 0.15 * scale);
+      leaf1.rotation.set(0.5, 0.8, -0.4);
+      roseGroup.add(leaf1);
+
+      const leaf2 = new THREE.Mesh(leafGeo, sepalMat);
+      leaf2.position.set(-0.16 * scale, -4.6 * scale, -0.08 * scale);
+      leaf2.rotation.set(-0.4, -1.2, 0.6);
+      roseGroup.add(leaf2);
+
+      // Si es la rosa central, halo muy tenue y elegante (sin deslumbrar)
       if (isCentral) {
         const auraCanvas = document.createElement('canvas');
-        auraCanvas.width = 64;
-        auraCanvas.height = 64;
+        auraCanvas.width = 128;
+        auraCanvas.height = 128;
         const aCtx = auraCanvas.getContext('2d')!;
-        const aGrad = aCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-        aGrad.addColorStop(0, 'rgba(253, 224, 71, 0.95)');
-        aGrad.addColorStop(0.45, 'rgba(245, 158, 11, 0.4)');
+        const aGrad = aCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+        aGrad.addColorStop(0, 'rgba(254, 240, 138, 0.35)');
+        aGrad.addColorStop(0.4, 'rgba(245, 158, 11, 0.18)');
+        aGrad.addColorStop(0.75, 'rgba(147, 51, 234, 0.08)');
         aGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         aCtx.fillStyle = aGrad;
-        aCtx.fillRect(0, 0, 64, 64);
+        aCtx.fillRect(0, 0, 128, 128);
         const auraTex = new THREE.CanvasTexture(auraCanvas);
         const auraMat = new THREE.SpriteMaterial({
           map: auraTex,
           blending: THREE.AdditiveBlending,
           transparent: true,
-          opacity: 0.85
+          opacity: 0.45
         });
         const auraSprite = new THREE.Sprite(auraMat);
-        auraSprite.scale.set(13 * scale, 13 * scale, 1);
-        flowerGroup.add(auraSprite);
+        auraSprite.scale.set(11 * scale, 11 * scale, 1);
+        auraSprite.position.set(0, 0.5 * scale, 0);
+        roseGroup.add(auraSprite);
       }
 
-      return flowerGroup;
+      return roseGroup;
     }
 
-    // Flor Central Majestuosa
-    const centralFlower = createFlower(1.85, 26, true);
-    centralFlower.position.set(0, 2.2, 0);
-    centralFlower.rotation.x = 0.32;
+    // Rosa Central Majestuosa (Diseño 3D elegante de Rosa Amarilla)
+    const centralFlower = createYellowRose(1.5, true);
+    centralFlower.position.set(0, 2.0, 0);
+    centralFlower.rotation.x = 0.35; // Inclinación suave hacia la cámara para lucir sus pétalos
     scene.add(centralFlower);
 
-    // Flores satélite orbitando
+    // Rosas Amarillas satélite orbitando
     const orbitingGroup = new THREE.Group();
     const flowerConfigs = [
-      { r: 10, a: 0.4, y: 1.6, s: 0.95 },
-      { r: 13.5, a: 1.6, y: -1.2, s: 0.85 },
-      { r: 11.2, a: 2.8, y: 2.5, s: 1.0 },
-      { r: 14.5, a: 3.9, y: 0.4, s: 0.9 },
-      { r: 12.0, a: 4.9, y: -2.2, s: 0.82 },
-      { r: 15.2, a: 5.8, y: 1.9, s: 0.92 }
+      { r: 10.5, a: 0.4, y: 1.5, s: 0.88 },
+      { r: 13.8, a: 1.6, y: -1.2, s: 0.78 },
+      { r: 11.5, a: 2.8, y: 2.4, s: 0.92 },
+      { r: 14.8, a: 3.9, y: 0.5, s: 0.84 },
+      { r: 12.2, a: 4.9, y: -2.1, s: 0.76 },
+      { r: 15.5, a: 5.8, y: 1.8, s: 0.86 }
     ];
 
     flowerConfigs.forEach((cfg, idx) => {
-      const fl = createFlower(cfg.s, 20, false);
+      const fl = createYellowRose(cfg.s, false);
       fl.position.set(
         Math.cos(cfg.a) * cfg.r,
         cfg.y,
         Math.sin(cfg.a) * cfg.r
       );
+      fl.rotation.x = 0.28 + (idx * 0.05);
+      fl.rotation.z = (idx % 2 === 0 ? 0.15 : -0.15);
       fl.userData = {
         baseRadius: cfg.r,
         baseAngle: cfg.a,
@@ -354,12 +430,12 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       ctx.roundRect(16, 20, 480, 120, 32);
       ctx.fill();
 
-      // Borde dorado
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
-      ctx.lineWidth = 4;
+      // Borde dorado suave
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.7)';
+      ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Destellos
+      // Destellos discretos
       ctx.fillStyle = '#FDE68A';
       ctx.font = '22px serif';
       ctx.fillText('✦', 36, 88);
@@ -370,8 +446,8 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       ctx.fillStyle = '#FEF08A';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'rgba(245, 158, 11, 0.9)';
-      ctx.shadowBlur = 18;
+      ctx.shadowColor = 'rgba(245, 158, 11, 0.6)';
+      ctx.shadowBlur = 12;
       ctx.fillText(text, 256, 80);
 
       const texture = new THREE.CanvasTexture(canvas);
@@ -392,7 +468,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       { text: "Eres mi sol", dist: 12.0, angle: 1.8, y: -2.6 },
       { text: "Te amo", dist: 9.0, angle: 3.2, y: 4.0 },
       { text: "Eres preciosa", dist: 13.8, angle: 4.3, y: 1.8 },
-      { text: "Mi flor favorita", dist: 11.2, angle: 5.4, y: -3.4 },
+      { text: "Mi rosa favorita", dist: 11.2, angle: 5.4, y: -3.4 },
       { text: "Luz de mis días", dist: 14.8, angle: 2.5, y: 5.5 }
     ];
 
@@ -409,7 +485,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     });
     scene.add(floatingTextsGroup);
 
-    // 9. PÉTALOS FLOTANTES Y CAYENDO SUAVEMENTE
+    // 9. PÉTALOS FLOTANTES Y CAYENDO SUAVEMENTE (Mayoría amarillo radiante con toques violetas)
     const petalsGroup = new THREE.Group();
     const petalShape = new THREE.Shape();
     petalShape.moveTo(0, 0);
@@ -418,19 +494,35 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     petalShape.quadraticCurveTo(-0.3, 0.4, 0, 0);
 
     const petalGeo = new THREE.ShapeGeometry(petalShape);
-    const petalMat = new THREE.MeshStandardMaterial({
+    
+    // Pétalo amarillo principal (85% de los pétalos)
+    const petalMatYellow = new THREE.MeshStandardMaterial({
       color: 0xfacc15,
-      roughness: 0.4,
-      emissive: 0xd97706,
-      emissiveIntensity: 0.35,
+      roughness: 0.55,
+      metalness: 0.02,
+      emissive: 0x92400e,
+      emissiveIntensity: 0.12,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.92
     });
 
-    for (let i = 0; i < 90; i++) {
-      const p = new THREE.Mesh(petalGeo, petalMat);
-      const rad = 3 + Math.random() * 24;
+    // Pétalo lila/morado sutil de contraste (15% de los pétalos)
+    const petalMatPurple = new THREE.MeshStandardMaterial({
+      color: 0xc084fc,
+      roughness: 0.58,
+      metalness: 0.02,
+      emissive: 0x581c87,
+      emissiveIntensity: 0.12,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85
+    });
+
+    for (let i = 0; i < 95; i++) {
+      const isPurple = i % 7 === 0; // Solo 1 de cada 7 es morado (el amarillo resalta mucho más)
+      const p = new THREE.Mesh(petalGeo, isPurple ? petalMatPurple : petalMatYellow);
+      const rad = 3 + Math.random() * 25;
       const theta = Math.random() * Math.PI * 2;
       p.position.set(
         Math.cos(theta) * rad,
