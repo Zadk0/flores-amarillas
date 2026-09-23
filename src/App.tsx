@@ -8,11 +8,13 @@ import { ThreeCanvas } from './components/ThreeCanvas';
 import { TopBar } from './components/TopBar';
 import { LetterModal, LetterDetail } from './components/LetterModal';
 import { DownloadModal } from './components/DownloadModal';
+import { WelcomeNote } from './components/WelcomeNote';
 import { romanticAudio } from './utils/audio';
 
 export default function App() {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [showWelcomeNote, setShowWelcomeNote] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [cameraPreset, setCameraPreset] = useState<'center' | 'overview' | 'top' | null>(null);
@@ -35,11 +37,9 @@ export default function App() {
       setSelectedLetter(detail);
     } else {
       setSelectedLetter({
-        title: "Mi amor",
-        tagline: "Septiembre de Flores Amarillas",
-        textParagraph1: "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.",
-        textParagraph2: "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.",
-        signature: "Te amo mucho."
+        title: "Para ti mi amor",
+        tagline: "FLORES AMARILLAS",
+        message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
       });
     }
     setIsLetterOpen(true);
@@ -73,6 +73,11 @@ export default function App() {
         onOpenLetter={handleOpenLetter}
         onOpenDownload={() => setIsDownloadOpen(true)}
       />
+
+      {/* Recuadro de bienvenida sobrepuesto morado claro */}
+      {showWelcomeNote && (
+        <WelcomeNote onClose={() => setShowWelcomeNote(false)} />
+      )}
 
       {/* 3. Indicador y botón interactivo "Para Ti" en la base - diseño limpio y simple */}
       <div className="fixed bottom-7 left-0 right-0 z-20 flex flex-col items-center pointer-events-none px-4">

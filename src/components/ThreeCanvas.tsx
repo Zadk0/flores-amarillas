@@ -398,11 +398,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     centralFlower.rotation.x = 0.35; // Inclinación suave hacia la cámara para lucir sus pétalos
     centralFlower.userData = {
       letterDetail: {
-        title: "Mi amor eterno",
-        tagline: "Rosa Dorada Central",
-        textParagraph1: "En el corazón de todo este universo cósmico, esta gran flor amarilla resplandece solo por ti.",
-        textParagraph2: "Tu amor es mi centro, mi paz y la luz dorada que ilumina cada segundo de mi vida.",
-        signature: "Siempre tuyo con todo mi corazón."
+        title: "Para ti mi amor",
+        tagline: "ROSA AMARILLA",
+        message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
       }
     };
     scene.add(centralFlower);
@@ -469,7 +467,7 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     }
 
     // ROSAS Y PALABRAS UNIDAS EN CONJUNTO
-    // Cada elemento orbita en pareja y posee una frase y mensaje romántico único y especial
+    // Cada elemento orbita en pareja y posee una frase única proporcionada por el usuario
     const orbitingGroup = new THREE.Group();
     const celestialPairs = [
       {
@@ -479,11 +477,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: 1.5,
         s: 0.88,
         letter: {
-          title: "Mi Amor Eterno",
+          title: "Para ti mi amor",
           tagline: "ME ENCANTAS BB",
-          textParagraph1: "Eres la mujer de mis sueños, siempre quiero estar a tu lado.",
-          textParagraph2: "Desde que llegaste a mi vida no hay un solo instante en que no agradezca tenerte; eres mi felicidad entera.",
-          signature: "Siempre a tu lado, por y para siempre."
+          message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
         }
       },
       {
@@ -493,11 +489,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: -1.2,
         s: 0.82,
         letter: {
-          title: "Amor de mi Vida",
+          title: "Para ti mi amor",
           tagline: "TE ADORO",
-          textParagraph1: "Me encantas de pies a cabeza amor de mi vida.",
-          textParagraph2: "Tu mirada, tu sonrisa, tu manera de ser y cada detalle tuyo me enamoran cada día más y más.",
-          signature: "Completamente loco por ti."
+          message: "Me encantas de pies a cabeza amor de mi vida"
         }
       },
       {
@@ -507,11 +501,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: 2.2,
         s: 0.90,
         letter: {
-          title: "Corazón de Melón",
+          title: "Para ti mi amor",
           tagline: "ME FASCINAS",
-          textParagraph1: "Me haces tan feliz corazon de melon.",
-          textParagraph2: "A tu lado cada día se llena de risas, ternura y un color amarillo brillante lleno de amor.",
-          signature: "Tu felicidad es la mía."
+          message: "Me haces tan feliz corazon de melon"
         }
       },
       {
@@ -521,11 +513,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: 0.5,
         s: 0.86,
         letter: {
-          title: "Mi Princesa Hermosa",
+          title: "Para ti mi amor",
           tagline: "TE AMO",
-          textParagraph1: "Eres la mejor novia del mundo mundial.",
-          textParagraph2: "No existe en ningún rincón del planeta alguien tan tierna, linda, comprensiva y perfecta como tú.",
-          signature: "El novio más afortunado del universo."
+          message: "Eres la mejor novia del mundo mundial"
         }
       },
       {
@@ -535,11 +525,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: -2.0,
         s: 0.80,
         letter: {
-          title: "Amorcito Chula",
+          title: "Para ti mi amor",
           tagline: "ERES HERMOSA",
-          textParagraph1: "Estas muy chula amorcito chula.",
-          textParagraph2: "Eres la más preciosa de todas, una florecita resplandeciente que ilumina todo a su alrededor.",
-          signature: "Para la más chula de mi corazón."
+          message: "Estas muy chula amorcito chula"
         }
       },
       {
@@ -549,11 +537,9 @@ export const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         y: 1.8,
         s: 0.88,
         letter: {
-          title: "Mi Amor Incondicional",
+          title: "Para ti mi amor",
           tagline: "ESTAS MUY DELII",
-          textParagraph1: "Gracias por siempre estar conmigo siempre, TE AMOOOOO.",
-          textParagraph2: "Gracias por tu apoyo, por tus abrazos cálidos y por hacerme sentir tan amado en cada segundo de la vida.",
-          signature: "¡Te amooooo con todas mis fuerzas!"
+          message: "Gracias por siempre estar conmigo siempre, TE AMOOOOO"
         }
       }
     ];

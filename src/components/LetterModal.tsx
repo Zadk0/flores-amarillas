@@ -5,9 +5,7 @@ import { Copy, Check, Sparkles, Heart, X, Edit3 } from 'lucide-react';
 export interface LetterDetail {
   title?: string;
   tagline?: string;
-  textParagraph1: string;
-  textParagraph2: string;
-  signature: string;
+  message: string;
 }
 
 interface LetterModalProps {
@@ -59,18 +57,13 @@ export const LetterModal: React.FC<LetterModalProps> = ({
 
   if (!isOpen) return null;
 
-  const currentParagraph1 = letterDetail?.textParagraph1 || 
-    "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
-  const currentParagraph2 = letterDetail?.textParagraph2 || 
-    "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
-  const currentSignature = letterDetail?.signature || "Te amo mucho.";
-  const currentTagline = letterDetail?.tagline || "Septiembre de Flores Amarillas";
-  const currentGreeting = letterDetail?.title || "Mi amor";
+  const currentMessage = letterDetail?.message || "Eres la mujer de mis sueños, siempre quiero estar a tu lado";
+  const currentTagline = letterDetail?.tagline || "FLORES AMARILLAS";
+  const currentGreeting = letterDetail?.title || "Para ti";
 
-  const letterText = `${currentGreeting}${customName ? ` ${customName}` : ""}:
-${currentParagraph1}
-${currentParagraph2}
-${currentSignature}`;
+  const letterText = customName 
+    ? `${currentGreeting}, ${customName}:\n\n"${currentMessage}"` 
+    : `"${currentMessage}"`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(letterText);
@@ -156,19 +149,11 @@ ${currentSignature}`;
           <div className="w-12 h-0.5 bg-amber-400/50 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        {/* Mensaje de la carta requerido */}
-        <div className="text-center font-garamond text-lg sm:text-xl text-stone-800 leading-relaxed space-y-3.5 my-6 px-2 sm:px-4">
-          <p className="font-medium text-stone-900">
-            {currentParagraph1}
+        {/* Mensaje con la frase romántica solicitada */}
+        <div className="text-center font-serif-display my-8 px-2 sm:px-6">
+          <p className="text-xl sm:text-2xl italic font-semibold text-stone-900 leading-relaxed tracking-wide">
+            "{currentMessage}"
           </p>
-          <p className="text-stone-700 font-normal">
-            {currentParagraph2}
-          </p>
-          <div className="pt-2">
-            <span className="font-script text-2xl sm:text-3xl font-semibold text-amber-800 block">
-              {currentSignature}
-            </span>
-          </div>
         </div>
 
         {/* Pie de carta con acciones */}

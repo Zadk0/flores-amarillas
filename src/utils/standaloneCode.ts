@@ -39,6 +39,23 @@ export const STANDALONE_INDEX_HTML = `<!DOCTYPE html>
       </div>
     </header>
 
+    <!-- Recuadro sobrepuesto morado claro de bienvenida -->
+    <div id="welcome-note" class="welcome-note">
+      <div class="welcome-note-card">
+        <button id="btn-close-welcome" class="welcome-close-btn" aria-label="Cerrar">&times;</button>
+        <div class="welcome-header">
+          <span class="welcome-icon">♥</span>
+          <span class="welcome-tagline">UN MENSAJE PARA TI</span>
+        </div>
+        <p class="welcome-main-text">
+          PERDON POR LA TARDANZA MI AMOR, PERO MÁS VALE TARDE QUE NUNCA
+        </p>
+        <p class="welcome-sub-text">
+          TE AMO MUCHISIMO CHAPARRITA HERMOSA 💛
+        </p>
+      </div>
+    </div>
+
     <!-- Indicador de navegación sutil -->
     <div class="navigation-hint">
       <span>Arrastra para girar · Rueda para zoom · Toca las flores</span>
@@ -137,6 +154,100 @@ body {
   color: #FEF3C7;
   font-family: 'Plus Jakarta Sans', sans-serif;
   user-select: none;
+}
+
+/* Recuadro morado claro de bienvenida sobrepuesto */
+.welcome-note {
+  position: absolute;
+  top: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 90%;
+  max-width: 440px;
+  pointer-events: auto;
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.welcome-note-card {
+  position: relative;
+  background: rgba(243, 232, 255, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid #d8b4fe;
+  border-radius: 18px;
+  padding: 18px 22px;
+  box-shadow: 0 16px 36px rgba(46, 16, 101, 0.35), 0 0 20px rgba(192, 132, 252, 0.2);
+  color: #3b0764;
+  text-align: center;
+}
+
+.welcome-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #7e22ce;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.welcome-close-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  color: #581c87;
+}
+
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.welcome-icon {
+  color: #a855f7;
+  font-size: 1rem;
+}
+
+.welcome-tagline {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: #6b21a8;
+  text-transform: uppercase;
+}
+
+.welcome-main-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #2e1065;
+  margin-bottom: 6px;
+}
+
+.welcome-sub-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #7e22ce;
+  letter-spacing: 0.02em;
 }
 
 #canvas-container {
@@ -827,11 +938,9 @@ export const STANDALONE_SCRIPT_JS = `/**
     centralFlowerGroup.userData = {
       isCenter: true,
       letterDetail: {
-        title: "Mi amor eterno",
-        tagline: "Rosa Dorada Central",
-        textParagraph1: "En el corazón de todo este universo cósmico, esta gran flor amarilla resplandece solo por ti.",
-        textParagraph2: "Tu amor es mi centro, mi paz y la luz dorada que ilumina cada segundo de mi vida.",
-        signature: "Siempre tuyo con todo mi corazón."
+        title: "Para ti mi amor",
+        tagline: "ROSA AMARILLA",
+        message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
       }
     };
     scene.add(centralFlowerGroup);
@@ -841,87 +950,75 @@ export const STANDALONE_SCRIPT_JS = `/**
     flowersOrbitGroup = new THREE.Group();
     const flowerPairs = [
       {
-        text: "Eres la mujer de mis sueños, siempre quiero estar a tu lado",
+        text: "ME ENCANTAS BB",
         radius: 11.0,
         angle: 0.4,
         y: 1.5,
         scale: 0.88,
         letter: {
-          title: "Mi Amor Eterno",
-          tagline: "El Sueño Más Hermoso",
-          textParagraph1: "Eres la mujer de mis sueños, siempre quiero estar a tu lado.",
-          textParagraph2: "Desde que llegaste a mi vida no hay un solo instante en que no agradezca tenerte; eres mi felicidad entera.",
-          signature: "Siempre a tu lado, por y para siempre."
+          title: "Para ti mi amor",
+          tagline: "ME ENCANTAS BB",
+          message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
         }
       },
       {
-        text: "Me encantas de pies a cabeza amor de mi vida",
+        text: "TE ADORO",
         radius: 14.5,
         angle: 1.45,
         y: -1.2,
         scale: 0.82,
         letter: {
-          title: "Amor de mi Vida",
-          tagline: "Fascinación Total",
-          textParagraph1: "Me encantas de pies a cabeza amor de mi vida.",
-          textParagraph2: "Tu mirada, tu sonrisa, tu manera de ser y cada detalle tuyo me enamoran cada día más y más.",
-          signature: "Completamente loco por ti."
+          title: "Para ti mi amor",
+          tagline: "TE ADORO",
+          message: "Me encantas de pies a cabeza amor de mi vida"
         }
       },
       {
-        text: "Me haces tan feliz corazon de melon",
+        text: "ME FASCINAS",
         radius: 12.2,
         angle: 2.5,
         y: 2.2,
         scale: 0.90,
         letter: {
-          title: "Corazón de Melón",
-          tagline: "Mi Alegría Inmensa",
-          textParagraph1: "Me haces tan feliz corazón de melón.",
-          textParagraph2: "A tu lado cada día se llena de risas, ternura y un color amarillo brillante lleno de amor.",
-          signature: "Tu felicidad es la mía."
+          title: "Para ti mi amor",
+          tagline: "ME FASCINAS",
+          message: "Me haces tan feliz corazon de melon"
         }
       },
       {
-        text: "Eres la mejor novia del mundo mundial",
+        text: "TE AMO",
         radius: 15.6,
         angle: 3.6,
         y: 0.5,
         scale: 0.86,
         letter: {
-          title: "Mi Princesa Hermosa",
-          tagline: "La Mejor de Todas",
-          textParagraph1: "Eres la mejor novia del mundo mundial.",
-          textParagraph2: "No existe en ningún rincón del planeta alguien tan tierna, linda, comprensiva y perfecta como tú.",
-          signature: "El novio más afortunado del universo."
+          title: "Para ti mi amor",
+          tagline: "TE AMO",
+          message: "Eres la mejor novia del mundo mundial"
         }
       },
       {
-        text: "Estas muy chula amorcito chula",
+        text: "ERES HERMOSA",
         radius: 13.0,
         angle: 4.65,
         y: -2.0,
         scale: 0.80,
         letter: {
-          title: "Amorcito Chula",
-          tagline: "Belleza Pura",
-          textParagraph1: "Estás muy chula amorcito chula.",
-          textParagraph2: "Eres la más preciosa de todas, una florecita resplandeciente que ilumina todo a su alrededor.",
-          signature: "Para la más chula de mi corazón."
+          title: "Para ti mi amor",
+          tagline: "ERES HERMOSA",
+          message: "Estas muy chula amorcito chula"
         }
       },
       {
-        text: "Gracias por siempre estar conmigo siempre, TE AMOOOOO",
+        text: "ESTAS MUY DELII",
         radius: 16.5,
         angle: 5.6,
         y: 1.8,
         scale: 0.88,
         letter: {
-          title: "Mi Amor Incondicional",
-          tagline: "Gratitud y Pasión",
-          textParagraph1: "Gracias por siempre estar conmigo siempre, ¡TE AMOOOOO!",
-          textParagraph2: "Gracias por tu apoyo, por tus abrazos cálidos y por hacerme sentir tan amado en cada segundo de la vida.",
-          signature: "¡Te amooooo con todas mis fuerzas!"
+          title: "Para ti mi amor",
+          tagline: "ESTAS MUY DELII",
+          message: "Gracias por siempre estar conmigo siempre, TE AMOOOOO"
         }
       }
     ];
@@ -1156,19 +1253,17 @@ export const STANDALONE_SCRIPT_JS = `/**
     isLetterOpen = true;
     letterModal.classList.add('active');
 
-    if (detail) {
-      if (letterGreetingDisplay) letterGreetingDisplay.textContent = detail.title || "Mi amor";
-      if (letterDateDisplay) letterDateDisplay.textContent = detail.tagline || "Septiembre de Flores Amarillas";
-      if (letterParagraph1) letterParagraph1.textContent = detail.textParagraph1 || "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
-      if (letterParagraph2) letterParagraph2.textContent = detail.textParagraph2 || "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
-      if (letterSignatureDisplay) letterSignatureDisplay.textContent = detail.signature || "Te amo mucho.";
-    } else {
-      if (letterGreetingDisplay) letterGreetingDisplay.textContent = "Mi amor";
-      if (letterDateDisplay) letterDateDisplay.textContent = "Septiembre de Flores Amarillas";
-      if (letterParagraph1) letterParagraph1.textContent = "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
-      if (letterParagraph2) letterParagraph2.textContent = "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
-      if (letterSignatureDisplay) letterSignatureDisplay.textContent = "Te amo mucho.";
-    }
+    const msg = (detail && detail.message) 
+      ? detail.message 
+      : "Eres la mujer de mis sueños, siempre quiero estar a tu lado";
+    const title = (detail && detail.title) ? detail.title : "Para ti mi amor";
+    const tag = (detail && detail.tagline) ? detail.tagline : "FLORES AMARILLAS";
+
+    if (letterGreetingDisplay) letterGreetingDisplay.textContent = title;
+    if (letterDateDisplay) letterDateDisplay.textContent = tag;
+    if (letterParagraph1) letterParagraph1.textContent = '"' + msg + '"';
+    if (letterParagraph2) letterParagraph2.textContent = "";
+    if (letterSignatureDisplay) letterSignatureDisplay.textContent = "";
 
     if (typeof confetti === 'function') {
       confetti({
@@ -1190,6 +1285,19 @@ export const STANDALONE_SCRIPT_JS = `/**
   function setupEvents() {
     btnOpenLetter.addEventListener('click', () => openLetter());
     btnCloseLetter.addEventListener('click', closeLetter);
+
+    const btnCloseWelcome = document.getElementById('btn-close-welcome');
+    const welcomeNote = document.getElementById('welcome-note');
+    if (btnCloseWelcome && welcomeNote) {
+      btnCloseWelcome.addEventListener('click', () => {
+        welcomeNote.style.transition = 'all 0.3s ease';
+        welcomeNote.style.opacity = '0';
+        welcomeNote.style.transform = 'translate(-50%, -10px) scale(0.95)';
+        setTimeout(() => {
+          welcomeNote.style.display = 'none';
+        }, 300);
+      });
+    }
 
     letterModal.addEventListener('click', (e) => {
       if (e.target === letterModal) closeLetter();

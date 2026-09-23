@@ -347,11 +347,9 @@
     centralFlowerGroup.userData = {
       isCenter: true,
       letterDetail: {
-        title: "Mi amor eterno",
-        tagline: "Rosa Dorada Central",
-        textParagraph1: "En el corazón de todo este universo cósmico, esta gran flor amarilla resplandece solo por ti.",
-        textParagraph2: "Tu amor es mi centro, mi paz y la luz dorada que ilumina cada segundo de mi vida.",
-        signature: "Siempre tuyo con todo mi corazón."
+        title: "Para ti mi amor",
+        tagline: "ROSA AMARILLA",
+        message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
       }
     };
     scene.add(centralFlowerGroup);
@@ -361,87 +359,75 @@
     flowersOrbitGroup = new THREE.Group();
     const flowerPairs = [
       {
-        text: "Eres la mujer de mis sueños, siempre quiero estar a tu lado",
+        text: "ME ENCANTAS BB",
         radius: 11.0,
         angle: 0.4,
         y: 1.5,
         scale: 0.88,
         letter: {
-          title: "Mi Amor Eterno",
-          tagline: "El Sueño Más Hermoso",
-          textParagraph1: "Eres la mujer de mis sueños, siempre quiero estar a tu lado.",
-          textParagraph2: "Desde que llegaste a mi vida no hay un solo instante en que no agradezca tenerte; eres mi felicidad entera.",
-          signature: "Siempre a tu lado, por y para siempre."
+          title: "Para ti mi amor",
+          tagline: "ME ENCANTAS BB",
+          message: "Eres la mujer de mis sueños, siempre quiero estar a tu lado"
         }
       },
       {
-        text: "Me encantas de pies a cabeza amor de mi vida",
+        text: "TE ADORO",
         radius: 14.5,
         angle: 1.45,
         y: -1.2,
         scale: 0.82,
         letter: {
-          title: "Amor de mi Vida",
-          tagline: "Fascinación Total",
-          textParagraph1: "Me encantas de pies a cabeza amor de mi vida.",
-          textParagraph2: "Tu mirada, tu sonrisa, tu manera de ser y cada detalle tuyo me enamoran cada día más y más.",
-          signature: "Completamente loco por ti."
+          title: "Para ti mi amor",
+          tagline: "TE ADORO",
+          message: "Me encantas de pies a cabeza amor de mi vida"
         }
       },
       {
-        text: "Me haces tan feliz corazon de melon",
+        text: "ME FASCINAS",
         radius: 12.2,
         angle: 2.5,
         y: 2.2,
         scale: 0.90,
         letter: {
-          title: "Corazón de Melón",
-          tagline: "Mi Alegría Inmensa",
-          textParagraph1: "Me haces tan feliz corazón de melón.",
-          textParagraph2: "A tu lado cada día se llena de risas, ternura y un color amarillo brillante lleno de amor.",
-          signature: "Tu felicidad es la mía."
+          title: "Para ti mi amor",
+          tagline: "ME FASCINAS",
+          message: "Me haces tan feliz corazon de melon"
         }
       },
       {
-        text: "Eres la mejor novia del mundo mundial",
+        text: "TE AMO",
         radius: 15.6,
         angle: 3.6,
         y: 0.5,
         scale: 0.86,
         letter: {
-          title: "Mi Princesa Hermosa",
-          tagline: "La Mejor de Todas",
-          textParagraph1: "Eres la mejor novia del mundo mundial.",
-          textParagraph2: "No existe en ningún rincón del planeta alguien tan tierna, linda, comprensiva y perfecta como tú.",
-          signature: "El novio más afortunado del universo."
+          title: "Para ti mi amor",
+          tagline: "TE AMO",
+          message: "Eres la mejor novia del mundo mundial"
         }
       },
       {
-        text: "Estas muy chula amorcito chula",
+        text: "ERES HERMOSA",
         radius: 13.0,
         angle: 4.65,
         y: -2.0,
         scale: 0.80,
         letter: {
-          title: "Amorcito Chula",
-          tagline: "Belleza Pura",
-          textParagraph1: "Estás muy chula amorcito chula.",
-          textParagraph2: "Eres la más preciosa de todas, una florecita resplandeciente que ilumina todo a su alrededor.",
-          signature: "Para la más chula de mi corazón."
+          title: "Para ti mi amor",
+          tagline: "ERES HERMOSA",
+          message: "Estas muy chula amorcito chula"
         }
       },
       {
-        text: "Gracias por siempre estar conmigo siempre, TE AMOOOOO",
+        text: "ESTAS MUY DELII",
         radius: 16.5,
         angle: 5.6,
         y: 1.8,
         scale: 0.88,
         letter: {
-          title: "Mi Amor Incondicional",
-          tagline: "Gratitud y Pasión",
-          textParagraph1: "Gracias por siempre estar conmigo siempre, ¡TE AMOOOOO!",
-          textParagraph2: "Gracias por tu apoyo, por tus abrazos cálidos y por hacerme sentir tan amado en cada segundo de la vida.",
-          signature: "¡Te amooooo con todas mis fuerzas!"
+          title: "Para ti mi amor",
+          tagline: "ESTAS MUY DELII",
+          message: "Gracias por siempre estar conmigo siempre, TE AMOOOOO"
         }
       }
     ];
@@ -698,20 +684,18 @@
     isLetterOpen = true;
     letterModal.classList.add('active');
 
-    // Actualizar contenido con la frase específica de la flor o palabra
-    if (detail) {
-      if (letterGreetingDisplay) letterGreetingDisplay.textContent = detail.title || "Mi amor";
-      if (letterDateDisplay) letterDateDisplay.textContent = detail.tagline || "Septiembre de Flores Amarillas";
-      if (letterParagraph1) letterParagraph1.textContent = detail.textParagraph1 || "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
-      if (letterParagraph2) letterParagraph2.textContent = detail.textParagraph2 || "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
-      if (letterSignatureDisplay) letterSignatureDisplay.textContent = detail.signature || "Te amo mucho.";
-    } else {
-      if (letterGreetingDisplay) letterGreetingDisplay.textContent = "Mi amor";
-      if (letterDateDisplay) letterDateDisplay.textContent = "Septiembre de Flores Amarillas";
-      if (letterParagraph1) letterParagraph1.textContent = "Estas flores amarillas son como tú: brillantes, radiantes y llenas de alegría.";
-      if (letterParagraph2) letterParagraph2.textContent = "Gracias por iluminar cada uno de mis días. Eres simplemente hermosa.";
-      if (letterSignatureDisplay) letterSignatureDisplay.textContent = "Te amo mucho.";
-    }
+    // Actualizar contenido con la frase específica elegida por el usuario
+    const msg = (detail && detail.message) 
+      ? detail.message 
+      : "Eres la mujer de mis sueños, siempre quiero estar a tu lado";
+    const title = (detail && detail.title) ? detail.title : "Para ti mi amor";
+    const tag = (detail && detail.tagline) ? detail.tagline : "FLORES AMARILLAS";
+
+    if (letterGreetingDisplay) letterGreetingDisplay.textContent = title;
+    if (letterDateDisplay) letterDateDisplay.textContent = tag;
+    if (letterParagraph1) letterParagraph1.textContent = `"${msg}"`;
+    if (letterParagraph2) letterParagraph2.textContent = "";
+    if (letterSignatureDisplay) letterSignatureDisplay.textContent = "";
 
     // Confetti dorado si está disponible la librería
     if (typeof confetti === 'function') {
@@ -738,6 +722,20 @@
     // Botón principal "Para Ti"
     btnOpenLetter.addEventListener('click', () => openLetter());
     btnCloseLetter.addEventListener('click', closeLetter);
+
+    // Cerrar recuadro morado de bienvenida
+    const btnCloseWelcome = document.getElementById('btn-close-welcome');
+    const welcomeNote = document.getElementById('welcome-note');
+    if (btnCloseWelcome && welcomeNote) {
+      btnCloseWelcome.addEventListener('click', () => {
+        welcomeNote.style.transition = 'all 0.3s ease';
+        welcomeNote.style.opacity = '0';
+        welcomeNote.style.transform = 'translate(-50%, -10px) scale(0.95)';
+        setTimeout(() => {
+          welcomeNote.style.display = 'none';
+        }, 300);
+      });
+    }
 
     // Cerrar al hacer clic en el fondo oscuro
     letterModal.addEventListener('click', (e) => {
